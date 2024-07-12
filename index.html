@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="login-styles.css">
 </head>
 <body>
-    <div class="login-container">
-        <h1>Login</h1>
+    <div class="login-register-container">
+        <h2>Login</h2>
         <form id="loginForm">
             <div>
                 <label for="loginEmail">Email:</label>
@@ -19,8 +18,8 @@
                 <input type="password" id="loginPassword" name="password" required>
             </div>
             <button type="submit">Login</button>
+            <p>Don't have an account? <a href="register.html">Register</a></p>
         </form>
-        <p><a href="register.html">Register</a></p>
     </div>
     <script src="script.js"></script>
 </body>

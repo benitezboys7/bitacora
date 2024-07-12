@@ -1,63 +1,70 @@
 document.addEventListener("DOMContentLoaded", function() {
+    const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
+    const customerForm = document.getElementById("customerForm");
+    const customersTable = document.getElementById("customersTable").querySelector("tbody");
+
     if (window.location.pathname.endsWith("index.html")) {
         // Login Page
-        const loginForm = document.getElementById("loginForm");
-        loginForm.addEventListener("submit", function(event) {
-            event.preventDefault();
-            const email = document.getElementById("loginEmail").value;
-            const password = document.getElementById("loginPassword").value;
+        if (loginForm) {
+            loginForm.addEventListener("submit", function(event) {
+                event.preventDefault();
+                const email = document.getElementById("loginEmail").value;
+                const password = document.getElementById("loginPassword").value;
 
-            if (!validateEmail(email) || !validatePassword(password)) {
-                alert("Invalid email or password format");
-                return;
-            }
-
-            const formData = new FormData(loginForm);
-            fetch("login.php", {
-                method: "POST",
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
-                if (data.success) {
-                    window.location.href = "dashboard.html";
+                if (!validateEmail(email) || !validatePassword(password)) {
+                    alert("Invalid email or password format");
+                    return;
                 }
-            })
-            .catch(error => console.error('Error:', error));
-        });
+
+                const formData = new FormData(loginForm);
+                fetch("login.php", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.success) {
+                        window.location.href = "dashboard.html";
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        }
     } else if (window.location.pathname.endsWith("register.html")) {
         // Register Page
-        const registerForm = document.getElementById("registerForm");
-        registerForm.addEventListener("submit", function(event) {
-            event.preventDefault();
-            const name = document.getElementById("registerName").value;
-            const email = document.getElementById("registerEmail").value;
-            const password = document.getElementById("registerPassword").value;
+        if (registerForm) {
+            registerForm.addEventListener("submit", function(event) {
+                event.preventDefault();
+                const name = document.getElementById("registerName").value;
+                const email = document.getElementById("registerEmail").value;
+                const password = document.getElementById("registerPassword").value;
 
-            if (!validateName(name) || !validateEmail(email) || !validatePassword(password)) {
-                alert("Invalid input");
-                return;
-            }
-
-            const formData = new FormData(registerForm);
-            fetch("register.php", {
-                method: "POST",
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
-                if (data.success) {
-                    window.location.href = "index.html";
+                if (!validateName(name) || !validateEmail(email) || !validatePassword(password)) {
+                    alert("Invalid input");
+                    return;
                 }
-            })
-            .catch(error => console.error('Error:', error));
-        });
+
+                const formData = new FormData(registerForm);
+                fetch("register.php", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.success) {
+                        window.location.href = "index.html";
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        }
     } else if (window.location.pathname.endsWith("dashboard.html")) {
         // Dashboard Page
         const links = document.querySelectorAll("aside a");
-        const mainContent = document.querySelector("main");
+        const contentSections = document.querySelectorAll(".content-section");
 
         links.forEach(link => {
             link.addEventListener("click", function(event) {
@@ -66,40 +73,89 @@ document.addEventListener("DOMContentLoaded", function() {
                 links.forEach(link => link.classList.remove("active"));
                 link.classList.add("active");
 
-                const target = link.querySelector("h3").innerText.toLowerCase();
+                const targetId = link.getAttribute("data-target");
 
-                document.querySelectorAll(".content-section").forEach(section => {
-                    if (section.id === target) {
+                contentSections.forEach(section => {
+                    if (section.id === targetId) {
                         section.classList.add("active");
                     } else {
                         section.classList.remove("active");
                     }
                 });
 
-                if (target === "customers") {
+                if (targetId === "customers") {
                     loadCustomers();
                 }
             });
         });
 
-        const customerForm = document.getElementById("customerForm");
-        const customersTable = document.getElementById("customersTable").querySelector("tbody");
+        if (customerForm) {
+            customerForm.addEventListener("submit", function(event) {
+                event.preventDefault();
+                const formData = new FormData(customerForm);
 
-        customerForm.addEventListener("submit", function(event) {
-            event.preventDefault();
-            const formData = new FormData(customerForm);
+                fetch("crud.php", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.success) {
+                        loadCustomers();
+                        customerForm.reset();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        }
 
-            fetch("crud.php", {
-                method: "POST",
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
-                loadCustomers();
-                customerForm.reset();
-            })
-            .catch(error => console.error('Error:', error));
-        });
+        function loadCustomers() {
+            fetch("crud.php?action=list")
+                .then(response => response.json())
+                .then(customers => {
+                    customersTable.innerHTML = '';
+                    customers.forEach(customer => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${customer.name}</td>
+                            <td>${customer.email}</td>
+                            <td>
+                                <button onclick="editCustomer(${customer.id})">Edit</button>
+                                <button onclick="deleteCustomer(${customer.id})">Delete</button>
+                            </td>
+                        `;
+                        customersTable.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
 
-        customersTable.addEventListener("click", function
+        window.editCustomer = function(id) {
+            fetch(`crud.php?action=get&id=${id}`)
+                .then(response => response.json())
+                .then(customer => {
+                    document.getElementById("customerId").value = customer.id;
+                    document.getElementById("customerName").value = customer.name;
+                    document.getElementById("customerEmail").value = customer.email;
+                })
+                .catch(error => console.error('Error:', error));
+        };
+
+        window.deleteCustomer = function(id) {
+            if (confirm('Are you sure you want to delete this customer?')) {
+                fetch(`crud.php?action=delete&id=${id}`, {
+                    method: "POST"
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.success) {
+                        loadCustomers();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        };
+    }
+});
