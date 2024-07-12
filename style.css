@@ -199,3 +199,30 @@ aside .top div.close{
     font-size: 11px;
     border-radius: var(--border-radius-1);
  }
+
+ .content-section {
+    display: none;
+}
+
+.content-section.active {
+    display: block;
+}
+
+
+#customersTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#customersTable th, #customersTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#customerForm {
+    margin-bottom: 20px;
+}
+
+#customerForm input {
+    margin-right: 10px;
+}
