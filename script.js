@@ -1,10 +1,8 @@
 document.addEventListener("DOMContentLoaded", function() {
     const loginForm = document.getElementById("loginForm");
-    const customerForm = document.getElementById("addcustomerForm");
-    const customersTable = document.getElementById("customersTable") ? document.getElementById("customersTable").querySelector("tbody") : null;
     const logoutButton = document.getElementById("logoutButton");
 
-    const addCustomerButton = document.getElementById("addCustomerButton");
+   
 
     if (window.location.pathname.endsWith("index.html")) {
         // Login Page
@@ -62,47 +60,6 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         });
 
-        
-    
-        
-    
-
-
-        
-        
-       
-
-        if (addCustomerButton) {
-            addCustomerButton.addEventListener("click", function() {
-                if (customerForm) {
-                    // Limpia el formulario y prepara para agregar un nuevo cliente
-                    customerForm.reset();
-                    document.getElementById('customerId').value = ''; // Limpia el ID
-                    document.getElementById('customerName').focus(); // Enfoca el campo de nombre
-                }
-            });
-        }
-    
-        if (customerForm) {
-            customerForm.addEventListener("submit", function(event) {
-                event.preventDefault();
-                const formData = new FormData(customerForm);
-                fetch("crud.php", {
-                    method: "POST",
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
-                    if (data.success) {
-                        loadCustomers(); // Recarga la lista de clientes
-                        customerForm.reset(); // Limpia el formulario
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            });
-        }
-    
         function loadCustomers() {
             fetch('crud.php?action=list')
                 .then(response => response.json())
@@ -127,35 +84,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 .catch(error => console.error('Error:', error));
         }
     
-        window.editCustomer = function(id) {
-            fetch(`crud.php?action=get&id=${id}`)
-                .then(response => response.json())
-                .then(customer => {
-                    if (customer) {
-                        document.getElementById('customerId').value = customer.id;
-                        document.getElementById('customerName').value = customer.name;
-                        document.getElementById('customerEmail').value = customer.email;
-                    } else {
-                        alert('Customer not found');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        }
-    
-        window.deleteCustomer = function(id) {
-            if (confirm('Are you sure you want to delete this customer?')) {
-                fetch(`crud.php?action=delete&id=${id}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        alert(data.message);
-                        if (data.success) {
-                            loadCustomers(); // Recarga la lista de clientes
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
-            }
-        }
-
         // Handle logout
         if (logoutButton) {
             logoutButton.addEventListener("click", function(event) {
