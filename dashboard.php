@@ -99,26 +99,31 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
             </div>
 
             <div id="customers" class="content-section">
-                <h1>Customers</h1>
-                <form id="addCustomerForm">
-                    <input type="hidden" id="customerId" name="id">
-                    <input type="text" id="customerName" name="name" placeholder="Name" required>
-                    <input type="email" id="customerEmail" name="email" placeholder="Email" required>
-                    <button type="submit">Save Customer</button>
-                </form>
+                        <h1>Customers</h1>
+            <!-- Botón para agregar clientes -->
+            <button id="addCustomerButton" class="add-customer-button">
+                <span class="material-symbols-outlined">add</span> Add Customer
+            </button>
+            
+            <form id="addCustomerForm">
+                <input type="hidden" id="customerId" name="id">
+                <input type="text" id="customerName" name="name" placeholder="Name" required>
+                <input type="email" id="customerEmail" name="email" placeholder="Email" required>
+                <button type="submit">Save Customer</button>
+            </form>
 
-                <table id="customersTable">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Dynamic rows will be appended here -->
-                    </tbody>
-                </table>
+            <table id="customersTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dynamic rows will be appended here -->
+                </tbody>
+            </table>
             </div>
 
             <div id="analytics" class="content-section">

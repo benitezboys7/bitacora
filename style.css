@@ -228,3 +228,21 @@ aside .top div.close{
 }
 
 
+.add-customer-button {
+    background-color: #4CAF50; /* Color de fondo */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    padding: 10px 20px; /* Espaciado */
+    text-align: center; /* Alineación del texto */
+    text-decoration: none; /* Sin subrayado */
+    display: inline-block; /* Mostrar en línea */
+    font-size: 16px; /* Tamaño de la fuente */
+    margin-bottom: 15px; /* Espaciado inferior */
+    cursor: pointer; /* Cursor de puntero */
+    border-radius: 5px; /* Bordes redondeados */
+}
+
+.add-customer-button .material-symbols-outlined {
+    vertical-align: middle; /* Alinear verticalmente el ícono */
+    margin-right: 8px; /* Espacio a la derecha del ícono */
+}
