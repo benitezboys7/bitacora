@@ -25,13 +25,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 .then(data => {
                     //alert(data);
                     if (data.includes("Login exitoso")) {
-                        window.location.href = "dashboard.html";
+                        window.location.href = "https://app.admisadministradores.com/dashboard.html";
                     }
                 })
                 .catch(error => console.error('Error:', error));
             });
         }
-    } else if (window.location.pathname.endsWith("dashboard.html")) {
+    } else if (window.location.pathname.endsWith("https://app.admisadministradores.com/dashboard.html")) {
         // Dashboard Page
         const links = document.querySelectorAll("aside a");
         const contentSections = document.querySelectorAll(".content-section");

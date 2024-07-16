@@ -32,7 +32,7 @@ if ($result->num_rows > 0) {
         $_SESSION['user_id'] = $row['id'];
         $_SESSION['user_email'] = $row['email'];
         // Redireccionar al dashboard
-        header("Location: dashboard.html");
+        header("Location: https://app.admisadministradores.com/dashboard.html");
         exit();
     } else {
         echo "Contraseña incorrecta";
