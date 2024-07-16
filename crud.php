@@ -33,25 +33,8 @@ try {
                 echo json_encode(['message' => 'ID is required']);
             }
             break;
-            
-            case 'create':
-                $name = $_POST['name'] ?? '';
-                $email = $_POST['email'] ?? '';
-            
-                if (empty($name) || empty($email)) {
-                    echo json_encode(['message' => 'Name and email are required']);
-                    break;
-                }
-            
-                $stmt = $pdo->prepare('INSERT INTO customers (name, email) VALUES (?, ?)');
-                $stmt->execute([$name, $email]);
-                echo json_encode(['message' => 'Customer created successfully']);
-                break;
-            
-        
-            
-        case 'update':
-            $id = $_POST['id'] ?? '';
+
+        case 'create':
             $name = $_POST['name'] ?? '';
             $email = $_POST['email'] ?? '';
 
@@ -60,17 +43,24 @@ try {
                 break;
             }
 
-            if ($action === 'update' && $id) {
-                $stmt = $pdo->prepare('UPDATE customers SET name = ?, email = ? WHERE id = ?');
-                $stmt->execute([$name, $email, $id]);
-                echo json_encode(['message' => 'Customer updated successfully']);
-            } elseif ($action === 'create') {
-                $stmt = $pdo->prepare('INSERT INTO customers (name, email) VALUES (?, ?)');
-                $stmt->execute([$name, $email]);
-                echo json_encode(['message' => 'Customer created successfully']);
-            } else {
-                echo json_encode(['message' => 'Invalid action or ID']);
+            $stmt = $pdo->prepare('INSERT INTO customers (name, email) VALUES (?, ?)');
+            $stmt->execute([$name, $email]);
+            echo json_encode(['message' => 'Customer created successfully']);
+            break;
+
+        case 'update':
+            $id = $_POST['id'] ?? '';
+            $name = $_POST['name'] ?? '';
+            $email = $_POST['email'] ?? '';
+
+            if (empty($id) || empty($name) || empty($email)) {
+                echo json_encode(['message' => 'ID, Name, and email are required']);
+                break;
             }
+
+            $stmt = $pdo->prepare('UPDATE customers SET name = ?, email = ? WHERE id = ?');
+            $stmt->execute([$name, $email, $id]);
+            echo json_encode(['message' => 'Customer updated successfully']);
             break;
 
         default:

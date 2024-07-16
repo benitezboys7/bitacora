@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const loginForm = document.getElementById("loginForm");
     const customerForm = document.getElementById("customerForm");
     const customersTable = document.getElementById("customersTable") ? document.getElementById("customersTable").querySelector("tbody") : null;
-    const logoutButton = document.getElementById("logoutButton"); // Cambia este selector según sea necesario
+    const logoutButton = document.getElementById("logoutButton");
 
     if (window.location.pathname.endsWith("index.html")) {
         // Login Page
@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 .then(response => response.json())
                 .then(data => {
                     alert(data.message);
-                    if (data.success) {
+                    if (data.message.includes("successfully")) {
                         loadCustomers();
                         customerForm.reset();
                     }
@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 .then(response => response.json())
                 .then(data => {
                     alert(data.message);
-                    if (data.success) {
+                    if (data.message.includes("successfully")) {
                         loadCustomers();
                     }
                 })
@@ -177,26 +177,3 @@ let inactivityTime = function () {
 };
 
 inactivityTime();
-
-
-function addCustomer(name, email) {
-    fetch('crud.php?action=create', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-            name: name,
-            email: email
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert(data.message);
-        if (data.success) {
-            loadCustomers(); // Recargar la lista de clientes
-            customerForm.reset(); // Limpiar el formulario
-        }
-    })
-    .catch(error => console.error('Error:', error));
-}
