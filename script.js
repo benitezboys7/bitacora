@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 })
                 .then(response => {
                     if (response.ok) {
-                        window.location.href = 'index.html'; // Redirige al inicio después de logout
+                        window.location.href = 'https://app.admisadministradores.com/index.html'; // Redirige al inicio después de logout
                     } else {
                         console.error('Logout failed');
                     }
