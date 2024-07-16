@@ -50,7 +50,31 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
                     <span class="material-symbols-outlined">person</span>
                     <h3>Customers</h3> 
                 </a>
-                <!-- Agrega más enlaces si es necesario -->
+                <a href="#" class="menu-link" data-target="analytics">
+                    <span class="material-symbols-outlined">insights</span>
+                    <h3>Analytics</h3> 
+                </a>
+                <a href="#" class="menu-link" data-target="messages">
+                    <span class="material-symbols-outlined">mail_outline</span>
+                    <h3>Messages</h3> 
+                    <span class="msg_count">14</span>
+                </a>
+                <a href="#" class="menu-link" data-target="products">
+                    <span class="material-symbols-outlined">receipt_long</span>
+                    <h3>Products</h3> 
+                </a>
+                <a href="#" class="menu-link" data-target="reports">
+                    <span class="material-symbols-outlined">report_gmailerrorred</span>
+                    <h3>Reports</h3> 
+                </a>
+                <a href="#" class="menu-link" data-target="settings">
+                    <span class="material-symbols-outlined">settings</span>
+                    <h3>Settings</h3> 
+                </a>
+                <a href="#" class="menu-link" data-target="add-product">
+                    <span class="material-symbols-outlined">add</span>
+                    <h3>Add Product</h3> 
+                </a>
                 <a href="#" id="logoutButton" class="menu-link">
                     <span class="material-symbols-outlined">logout</span>
                     <h3>Logout</h3>
@@ -66,16 +90,21 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
                 <div class="date">
                     <input type="date">
                 </div>
-                <!-- Puedes agregar más contenido aquí -->
+                <div class="insights">
+                    <!--start selling-->
+                    <div class="sales">
+                        <span class="material-symbols-outlined"></span>
+                    </div>
+                </div>
             </div>
 
             <div id="customers" class="content-section">
                 <h1>Customers</h1>
-                <form id="customerForm">
+                <form id="addCustomerForm">
                     <input type="hidden" id="customerId" name="id">
                     <input type="text" id="customerName" name="name" placeholder="Name" required>
                     <input type="email" id="customerEmail" name="email" placeholder="Email" required>
-                    <button type="submit">Save</button>
+                    <button type="submit">Save Customer</button>
                 </form>
 
                 <table id="customersTable">
@@ -87,12 +116,40 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Las filas dinámicas se agregarán aquí -->
+                        <!-- Dynamic rows will be appended here -->
                     </tbody>
                 </table>
             </div>
 
-            <!-- Puedes agregar más secciones aquí -->
+            <div id="analytics" class="content-section">
+                <h1>Analytics</h1>
+                <!-- Contenido de Analytics -->
+            </div>
+
+            <div id="messages" class="content-section">
+                <h1>Messages</h1>
+                <!-- Contenido de Messages -->
+            </div>
+
+            <div id="products" class="content-section">
+                <h1>Products</h1>
+                <!-- Contenido de Products -->
+            </div>
+
+            <div id="reports" class="content-section">
+                <h1>Reports</h1>
+                <!-- Contenido de Reports -->
+            </div>
+
+            <div id="settings" class="content-section">
+                <h1>Settings</h1>
+                <!-- Contenido de Settings -->
+            </div>
+
+            <div id="add-product" class="content-section">
+                <h1>Add Product</h1>
+                <!-- Contenido de Add Product -->
+            </div>
         </main>
         <!-- main section end-->
 
