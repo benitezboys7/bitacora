@@ -61,7 +61,7 @@ if (!isset($_SESSION['user_id'])) {
                     <span class="material-symbols-outlined">add</span>
                     <h3>Add Product</h3> 
                 </a>
-                <a href="#" class="menu-link">
+                <a href="logout.php" class="menu-link">
                     <span class="material-symbols-outlined">logout</span>
                     <h3>Logout</h3> 
                 </a>
