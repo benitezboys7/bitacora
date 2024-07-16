@@ -31,13 +31,11 @@ if ($result->num_rows > 0) {
     if ($password === $row['password']) { // Comparar directamente ya que las contraseñas no están cifradas
         $_SESSION['user_id'] = $row['id'];
         $_SESSION['user_email'] = $row['email'];
-        echo "Login exitoso!";
         // Redireccionar al dashboard
-        header("Location: dashboard.php");
+        header("Location: dashboard.html");
         exit();
     } else {
-        echo "Contraseña incorrecta<br>";
-        echo "Stored Password from DB: " . $row['password'] . "<br>";
+        echo "Contraseña incorrecta";
     }
 } else {
     echo "Usuario no encontrado";
