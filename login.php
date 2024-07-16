@@ -1,7 +1,7 @@
 <?php
 session_start();
-header('Content-Type: application/json');
 
+// Conexión a la base de datos
 $servername = "localhost"; // Cambia esto si tu servidor es diferente
 $username = "u686972174_admis151522"; // Cambia esto si tu usuario es diferente
 $password = "Admis.database151522!"; // Cambia esto si tu contraseña es diferente
@@ -9,25 +9,36 @@ $dbname = "u686972174_bitacoradb"; // Cambia esto al nombre de tu base de datos
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+// Verificar conexión
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die("Conexión fallida: " . $conn->connect_error);
 }
 
+// Obtener los datos del formulario
 $email = $_POST['email'];
 $password = $_POST['password'];
 
-// Prepara y ejecuta la consulta
-$sql = "SELECT * FROM users WHERE email = ? AND password = ?";
+// Consulta para verificar el usuario
+$sql = "SELECT * FROM users WHERE email = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ss", $email, $password);
+$stmt->bind_param("s", $email);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
-    $_SESSION['user'] = $email;
-    echo json_encode(['success' => true, 'message' => 'Login successful']);
+    $row = $result->fetch_assoc();
+    // Verificar la contraseña
+    if (password_verify($password, $row['password'])) {
+        $_SESSION['user_id'] = $row['id'];
+        $_SESSION['user_email'] = $row['email'];
+        echo "Login exitoso!";
+        // Redireccionar al dashboard
+        header("Location: dashboard.php");
+    } else {
+        echo "Contraseña incorrecta";
+    }
 } else {
-    echo json_encode(['success' => false, 'message' => 'Invalid email or password']);
+    echo "Usuario no encontrado";
 }
 
 $stmt->close();

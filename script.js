@@ -1,8 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     const loginForm = document.getElementById("loginForm");
-    const registerForm = document.getElementById("registerForm");
     const customerForm = document.getElementById("customerForm");
-    const customersTable = document.getElementById("customersTable").querySelector("tbody");
+    const customersTable = document.getElementById("customersTable") ? document.getElementById("customersTable").querySelector("tbody") : null;
 
     if (window.location.pathname.endsWith("index.html")) {
         // Login Page
@@ -22,40 +21,11 @@ document.addEventListener("DOMContentLoaded", function() {
                     method: "POST",
                     body: formData
                 })
-                .then(response => response.json())
+                .then(response => response.text())
                 .then(data => {
-                    alert(data.message);
-                    if (data.success) {
+                    alert(data);
+                    if (data.includes("Login exitoso")) {
                         window.location.href = "dashboard.html";
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            });
-        }
-    } else if (window.location.pathname.endsWith("register.html")) {
-        // Register Page
-        if (registerForm) {
-            registerForm.addEventListener("submit", function(event) {
-                event.preventDefault();
-                const name = document.getElementById("registerName").value;
-                const email = document.getElementById("registerEmail").value;
-                const password = document.getElementById("registerPassword").value;
-
-                if (!validateName(name) || !validateEmail(email) || !validatePassword(password)) {
-                    alert("Invalid input");
-                    return;
-                }
-
-                const formData = new FormData(registerForm);
-                fetch("register.php", {
-                    method: "POST",
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
-                    if (data.success) {
-                        window.location.href = "index.html";
                     }
                 })
                 .catch(error => console.error('Error:', error));
@@ -157,5 +127,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 .catch(error => console.error('Error:', error));
             }
         };
+    }
+
+    function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+
+    function validatePassword(password) {
+        return password.length >= 6;
     }
 });
