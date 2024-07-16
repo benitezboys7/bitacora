@@ -2,10 +2,10 @@
 session_start();
 
 // Conexión a la base de datos
-$servername = "localhost"; // Cambia esto si tu servidor es diferente
-$username = "u686972174_admis151522"; // Cambia esto si tu usuario es diferente
-$password = "Admis.database151522!"; // Cambia esto si tu contraseña es diferente
-$dbname = "u686972174_bitacoradb"; // Cambia esto al nombre de tu base de datos
+$servername = "localhost";
+$username = "u686972174_admis151522";
+$password = "Admis.database151522!";
+$dbname = "u686972174_bitacoradb";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
