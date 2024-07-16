@@ -18,9 +18,6 @@ if ($conn->connect_error) {
 $email = $_POST['email'];
 $password = $_POST['password'];
 
-echo "Email: " . $email . "<br>";
-echo "Password: " . $password . "<br>";
-
 // Consulta para verificar el usuario
 $sql = "SELECT * FROM users WHERE email = ?";
 $stmt = $conn->prepare($sql);
@@ -36,7 +33,7 @@ if ($result->num_rows > 0) {
         $_SESSION['user_email'] = $row['email'];
         echo "Login exitoso!";
         // Redireccionar al dashboard
-        header("Location: dashboard.html");
+        header("Location: dashboard.php");
         exit();
     } else {
         echo "Contraseña incorrecta<br>";
