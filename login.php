@@ -18,6 +18,8 @@ if ($conn->connect_error) {
 $email = $_POST['email'];
 $password = $_POST['password'];
 
+echo $password;
+echo $email;
 // Consulta para verificar el usuario
 $sql = "SELECT * FROM users WHERE email = ?";
 $stmt = $conn->prepare($sql);
