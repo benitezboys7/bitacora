@@ -18,8 +18,9 @@ if ($conn->connect_error) {
 $email = $_POST['email'];
 $password = $_POST['password'];
 
-echo $password;
-echo $email;
+echo "Email: " . $email . "<br>";
+echo "Password: " . $password . "<br>";
+
 // Consulta para verificar el usuario
 $sql = "SELECT * FROM users WHERE email = ?";
 $stmt = $conn->prepare($sql);
@@ -30,14 +31,16 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     // Verificar la contraseña
-    if (password_verify($password, $row['password'])) {
+    if ($password === $row['password']) { // Comparar directamente ya que las contraseñas no están cifradas
         $_SESSION['user_id'] = $row['id'];
         $_SESSION['user_email'] = $row['email'];
         echo "Login exitoso!";
         // Redireccionar al dashboard
         header("Location: dashboard.php");
+        exit();
     } else {
-        echo "Contraseña incorrecta";
+        echo "Contraseña incorrecta<br>";
+        echo "Stored Password from DB: " . $row['password'] . "<br>";
     }
 } else {
     echo "Usuario no encontrado";
