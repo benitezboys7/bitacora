@@ -159,3 +159,21 @@ document.addEventListener("DOMContentLoaded", function() {
         return password.length >= 6;
     }
 });
+
+let inactivityTime = function () {
+    let time;
+    window.onload = resetTimer;
+    document.onmousemove = resetTimer;
+    document.onkeypress = resetTimer;
+
+    function logout() {
+        window.location.href = 'index.html'; // Redirige al usuario al inicio de sesión
+    }
+
+    function resetTimer() {
+        clearTimeout(time);
+        time = setTimeout(logout, 1800000); // 30 minutos
+    }
+};
+
+inactivityTime();
