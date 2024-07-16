@@ -11,7 +11,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Verificar conexión
 if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
+    die(json_encode(["success" => false, "message" => "Conexión fallida: " . $conn->connect_error]));
 }
 
 // Obtener los datos del formulario
@@ -25,22 +25,22 @@ $stmt->bind_param("s", $email);
 $stmt->execute();
 $result = $stmt->get_result();
 
+$response = ["success" => false, "message" => "Usuario no encontrado"];
+
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     // Verificar la contraseña
     if ($password === $row['password']) { // Comparar directamente ya que las contraseñas no están cifradas
         $_SESSION['user_id'] = $row['id'];
         $_SESSION['user_email'] = $row['email'];
-        // Redireccionar al dashboard
-        header("Location: https://app.admisadministradores.com/dashboard.html");
-        exit();
+        $response = ["success" => true, "message" => "Login exitoso!"];
     } else {
-        echo "Contraseña incorrecta";
+        $response = ["success" => false, "message" => "Contraseña incorrecta"];
     }
-} else {
-    echo "Usuario no encontrado";
 }
 
 $stmt->close();
 $conn->close();
+
+echo json_encode($response);
 ?>

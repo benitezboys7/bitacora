@@ -21,17 +21,17 @@ document.addEventListener("DOMContentLoaded", function() {
                     method: "POST",
                     body: formData
                 })
-                .then(response => response.text())
+                .then(response => response.json())
                 .then(data => {
-                    alert(data);
-                    if (data.includes("Login exitoso")) {
-                        window.location.href = "https://app.admisadministradores.com/dashboard.html";
+                    alert(data.message);
+                    if (data.success) {
+                        window.location.href = "dashboard.html";
                     }
                 })
                 .catch(error => console.error('Error:', error));
             });
         }
-    } else if (window.location.pathname.endsWith("https://app.admisadministradores.com/dashboard.html")) {
+    } else if (window.location.pathname.endsWith("dashboard.html")) {
         // Dashboard Page
         const links = document.querySelectorAll("aside a");
         const contentSections = document.querySelectorAll(".content-section");
