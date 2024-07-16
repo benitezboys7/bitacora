@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const loginForm = document.getElementById("loginForm");
     const customerForm = document.getElementById("customerForm");
     const customersTable = document.getElementById("customersTable") ? document.getElementById("customersTable").querySelector("tbody") : null;
-    const logoutButton = document.querySelector("aside a[href='#']"); // Se asume que el botón de logout es un enlace dentro del aside
+    const logoutButton = document.getElementById("logoutButton"); // Cambia este selector según sea necesario
 
     if (window.location.pathname.endsWith("index.html")) {
         // Login Page
@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 })
                 .then(response => {
                     if (response.ok) {
-                        window.location.href = 'https://app.admisadministradores.com/index.html'; // Redirige al inicio después de logout
+                        window.location.href = 'index.html'; // Redirige al inicio después de logout
                     } else {
                         console.error('Logout failed');
                     }
