@@ -25,13 +25,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 .then(data => {
                     alert(data.message);
                     if (data.success) {
-                        window.location.href = "dashboard.html";
+                        window.location.href = "dashboard.php";
                     }
                 })
                 .catch(error => console.error('Error:', error));
             });
         }
-    } else if (window.location.pathname.endsWith("dashboard.html")) {
+    } else if (window.location.pathname.endsWith("dashboard.php")) {
         // Dashboard Page
         const links = document.querySelectorAll("aside a");
         const contentSections = document.querySelectorAll(".content-section");
