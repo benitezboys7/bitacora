@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const customersTable = document.getElementById("customersTable") ? document.getElementById("customersTable").querySelector("tbody") : null;
     const logoutButton = document.getElementById("logoutButton");
 
-
+    const addCustomerButton = document.getElementById("addCustomerButton");
 
     if (window.location.pathname.endsWith("index.html")) {
         // Login Page
@@ -62,11 +62,24 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         });
 
+        
+    
+        
+    
+
+
+        
+        
+       
+
         if (addCustomerButton) {
             addCustomerButton.addEventListener("click", function() {
-                // Limpia el formulario para nueva adición
-                customerForm.reset();
-                document.getElementById('customerId').value = ''; // Limpia el ID
+                if (customerForm) {
+                    // Limpia el formulario y prepara para agregar un nuevo cliente
+                    customerForm.reset();
+                    document.getElementById('customerId').value = ''; // Limpia el ID
+                    document.getElementById('customerName').focus(); // Enfoca el campo de nombre
+                }
             });
         }
     
@@ -90,29 +103,31 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         }
     
-
-        if (customerForm) {
-            customerForm.addEventListener("submit", function(event) {
-                event.preventDefault();
-                const formData = new FormData(customerForm);
-
-                fetch("crud.php", {
-                    method: "POST",
-                    body: formData
-                })
+        function loadCustomers() {
+            fetch('crud.php?action=list')
                 .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
-                    if (data.message.includes("successfully")) {
-                        loadCustomers();
-                        customerForm.reset();
+                .then(customers => {
+                    if (customersTable) {
+                        if (customers.length > 0) {
+                            customersTable.innerHTML = customers.map(customer => `
+                                <tr>
+                                    <td>${customer.name}</td>
+                                    <td>${customer.email}</td>
+                                    <td>
+                                        <button onclick="editCustomer(${customer.id})">Edit</button>
+                                        <button onclick="deleteCustomer(${customer.id})">Delete</button>
+                                    </td>
+                                </tr>
+                            `).join('');
+                        } else {
+                            customersTable.innerHTML = '<tr><td colspan="3">No customers found</td></tr>';
+                        }
                     }
                 })
                 .catch(error => console.error('Error:', error));
-            });
         }
-
-        function editCustomer(id) {
+    
+        window.editCustomer = function(id) {
             fetch(`crud.php?action=get&id=${id}`)
                 .then(response => response.json())
                 .then(customer => {
@@ -126,45 +141,20 @@ document.addEventListener("DOMContentLoaded", function() {
                 })
                 .catch(error => console.error('Error:', error));
         }
-        
-        function loadCustomers() {
-            fetch('crud.php?action=list')
-                .then(response => response.json())
-                .then(customers => {
-                    if (customers.length > 0) {
-                        customersTable.innerHTML = customers.map(customer => `
-                            <tr>
-                                <td>${customer.name}</td>
-                                <td>${customer.email}</td>
-                                <td>
-                                    <button onclick="editCustomer(${customer.id})">Edit</button>
-                                    <button onclick="deleteCustomer(${customer.id})">Delete</button>
-                                </td>
-                            </tr>
-                        `).join('');
-                    } else {
-                        customersTable.innerHTML = '<tr><td colspan="3">No customers found</td></tr>';
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        }
-        
-
+    
         window.deleteCustomer = function(id) {
             if (confirm('Are you sure you want to delete this customer?')) {
-                fetch(`crud.php?action=delete&id=${id}`, {
-                    method: "POST"
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
-                    if (data.message.includes("successfully")) {
-                        loadCustomers();
-                    }
-                })
-                .catch(error => console.error('Error:', error));
+                fetch(`crud.php?action=delete&id=${id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                        if (data.success) {
+                            loadCustomers(); // Recarga la lista de clientes
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
             }
-        };
+        }
 
         // Handle logout
         if (logoutButton) {
