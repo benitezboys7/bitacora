@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 .then(data => {
                     alert(data.message);
                     if (data.success) {
-                        window.location.href = "dashboard.php";
+                        window.location.href = "dashboard.php"; // Redirige a dashboard.php
                     }
                 })
                 .catch(error => console.error('Error:', error));
