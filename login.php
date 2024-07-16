@@ -36,7 +36,7 @@ if ($result->num_rows > 0) {
         $_SESSION['user_email'] = $row['email'];
         echo "Login exitoso!";
         // Redireccionar al dashboard
-        header("Location: dashboard.php");
+        header("Location: dashboard.html");
         exit();
     } else {
         echo "Contraseña incorrecta<br>";
