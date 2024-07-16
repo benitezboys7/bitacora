@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
     const loginForm = document.getElementById("loginForm");
-    const customerForm = document.getElementById("customerForm");
+    const customerForm = document.getElementById("addcustomerForm");
     const customersTable = document.getElementById("customersTable") ? document.getElementById("customersTable").querySelector("tbody") : null;
     const logoutButton = document.getElementById("logoutButton");
 
