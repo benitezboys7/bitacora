@@ -1,5 +1,5 @@
 <?php
-include customers.php;
+
 session_start(); // Inicia la sesión
 
 // Verifica si el usuario ha iniciado sesión
