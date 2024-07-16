@@ -104,12 +104,12 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
 
             <div id="customers" class="content-section">
                 <h1>Customers</h1>
-                <form id="customerForm">
-                    <input type="hidden" name="id" id="customerId">
-                    <input type="text" name="name" id="customerName" placeholder="Name" required>
-                    <input type="email" name="email" id="customerEmail" placeholder="Email" required>
-                    <button type="submit">Save</button>
+                <form id="addCustomerForm">
+                    <input type="text" id="customerName" name="name" placeholder="Name" required>
+                    <input type="email" id="customerEmail" name="email" placeholder="Email" required>
+                    <button type="submit">Add Customer</button>
                 </form>
+
                 <table id="customersTable">
                     <thead>
                         <tr>

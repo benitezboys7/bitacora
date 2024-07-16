@@ -177,3 +177,26 @@ let inactivityTime = function () {
 };
 
 inactivityTime();
+
+
+function addCustomer(name, email) {
+    fetch('crud.php?action=create', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            name: name,
+            email: email
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+        if (data.success) {
+            loadCustomers(); // Recargar la lista de clientes
+            customerForm.reset(); // Limpiar el formulario
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
