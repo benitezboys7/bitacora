@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 })
                 .then(response => response.text())
                 .then(data => {
-                    //alert(data);
+                    alert(data);
                     if (data.includes("Login exitoso")) {
                         window.location.href = "https://app.admisadministradores.com/dashboard.html";
                     }
