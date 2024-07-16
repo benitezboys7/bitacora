@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const loginForm = document.getElementById("loginForm");
     const customerForm = document.getElementById("customerForm");
     const customersTable = document.getElementById("customersTable") ? document.getElementById("customersTable").querySelector("tbody") : null;
+    const logoutButton = document.querySelector("aside a[href='#']"); // Se asume que el botón de logout es un enlace dentro del aside
 
     if (window.location.pathname.endsWith("index.html")) {
         // Login Page
@@ -127,6 +128,26 @@ document.addEventListener("DOMContentLoaded", function() {
                 .catch(error => console.error('Error:', error));
             }
         };
+
+        // Handle logout
+        if (logoutButton) {
+            logoutButton.addEventListener("click", function(event) {
+                event.preventDefault(); // Evita la acción predeterminada del enlace
+
+                fetch('logout.php', { // Asegúrate de que la URL sea correcta
+                    method: 'POST',
+                    credentials: 'same-origin' // Incluye cookies para la sesión
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = 'index.html'; // Redirige al inicio después de logout
+                    } else {
+                        console.error('Logout failed');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        }
     }
 
     function validateEmail(email) {
