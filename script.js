@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function() {
             customerForm.addEventListener("submit", function(event) {
                 event.preventDefault();
                 const formData = new FormData(customerForm);
-        
+
                 fetch("crud.php", {
                     method: "POST",
                     body: formData
@@ -72,17 +72,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 .then(response => response.json())
                 .then(data => {
                     alert(data.message);
-                    if (data.success) {
+                    if (data.message.includes("successfully")) {
                         loadCustomers();
                         customerForm.reset();
                     }
                 })
                 .catch(error => console.error('Error:', error));
             });
-            console.log([...formData.entries()]);
-
         }
-        
 
         function loadCustomers() {
             fetch("crud.php?action=list")
@@ -105,20 +102,16 @@ document.addEventListener("DOMContentLoaded", function() {
                 .catch(error => console.error('Error:', error));
         }
 
-        function editCustomer(id) {
-            fetch(`crud.php?action=get&id=${id}`)
+        window.editCustomer = function(id) {
+            fetch(`crud.php?action=update&id=${id}`)
                 .then(response => response.json())
                 .then(customer => {
-                    if (customer) {
-                        document.getElementById('customerId').value = customer.id;
-                        document.getElementById('customerName').value = customer.name;
-                        document.getElementById('customerEmail').value = customer.email;
-                    } else {
-                        alert('Customer not found');
-                    }
+                    document.getElementById("customerId").value = customer.id;
+                    document.getElementById("customerName").value = customer.name;
+                    document.getElementById("customerEmail").value = customer.email;
                 })
                 .catch(error => console.error('Error:', error));
-        }
+        };
 
         window.deleteCustomer = function(id) {
             if (confirm('Are you sure you want to delete this customer?')) {
