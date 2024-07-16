@@ -15,7 +15,7 @@ if (!isset($_SESSION['user_id'])) {
 </head>
 <body>
     <div class="container">
-        <!-- aisde section start-->
+        <!-- aside section start-->
         <aside>
             <div class="top">
                 <div class="logo">
@@ -67,7 +67,7 @@ if (!isset($_SESSION['user_id'])) {
                 </a>
             </div>
         </aside>
-        <!-- aisde section end-->
+        <!-- aside section end-->
 
         <!-- main section start-->
         <main>
