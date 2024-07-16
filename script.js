@@ -8,23 +8,16 @@ document.addEventListener("DOMContentLoaded", function() {
         if (loginForm) {
             loginForm.addEventListener("submit", function(event) {
                 event.preventDefault();
-                const email = document.getElementById("loginEmail").value;
-                const password = document.getElementById("loginPassword").value;
-
-                if (!validateEmail(email) || !validatePassword(password)) {
-                    alert("Invalid email or password format");
-                    return;
-                }
-
                 const formData = new FormData(loginForm);
+    
                 fetch("login.php", {
                     method: "POST",
                     body: formData
                 })
-                .then(response => response.text())
+                .then(response => response.json())
                 .then(data => {
-                    alert(data);
-                    if (data.includes("Login exitoso")) {
+                    alert(data.message);
+                    if (data.success) {
                         window.location.href = "dashboard.html";
                     }
                 })
