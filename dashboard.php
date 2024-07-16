@@ -50,7 +50,7 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
                     <span class="material-symbols-outlined">person</span>
                     <h3>Customers</h3> 
                 </a>
-                <!-- Otros enlaces -->
+                <!-- Agrega más enlaces si es necesario -->
                 <a href="#" id="logoutButton" class="menu-link">
                     <span class="material-symbols-outlined">logout</span>
                     <h3>Logout</h3>
@@ -66,7 +66,7 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
                 <div class="date">
                     <input type="date">
                 </div>
-                <!-- Más contenido aquí -->
+                <!-- Puedes agregar más contenido aquí -->
             </div>
 
             <div id="customers" class="content-section">
@@ -87,12 +87,12 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Dynamic rows will be appended here -->
+                        <!-- Las filas dinámicas se agregarán aquí -->
                     </tbody>
                 </table>
             </div>
 
-            <!-- Más secciones aquí -->
+            <!-- Puedes agregar más secciones aquí -->
         </main>
         <!-- main section end-->
 
