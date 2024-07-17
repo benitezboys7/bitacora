@@ -8,11 +8,10 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Configuración de la base de datos
 $servername = "localhost";
-$username = "username";
-$password = "password";
-$dbname = "database_name";
+$username = "u686972174_admis151522";
+$password = "Admis.database151522!";
+$dbname = "u686972174_bitacoradb";
 
 // Crear conexión
 $conn = new mysqli($servername, $username, $password, $dbname);
