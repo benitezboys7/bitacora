@@ -27,6 +27,21 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
+<!-- Modal -->
+<div id="addCustomerModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Add New Customer</h2>
+        <form id="addCustomerForm" method="post" action="add_customer_process.php">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <button type="submit">Add Customer</button>
+        </form>
+    </div>
+</div>
+
 <body>
     <div class="container">
         <!-- aside section start-->
@@ -100,7 +115,8 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
 
             <div id="customers" class="content-section">
                 <h1>Customers</h1>
-                <a href="add_customer.php" class="add-button">Add New Customer</a>
+                <a href="#" class="add-button" id="addCustomerBtn">Add New Customer</a>
+
                 <table>
                     <thead>
                         <tr>
