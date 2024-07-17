@@ -32,7 +32,7 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Add New Customer</h2>
-        <form id="addCustomerForm" method="post" action="add_customer_process.php">
+        <form id="addCustomerForm" method="post" action="add_customer.php">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required>
             <label for="email">Email:</label>
