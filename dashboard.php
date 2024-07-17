@@ -1,5 +1,4 @@
 <?php
-
 session_start(); // Inicia la sesión
 
 // Verifica si el usuario ha iniciado sesión
@@ -100,8 +99,7 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
             </div>
 
             <div id="customers" class="content-section">
-                        <h1>Customers</h1>
-            
+                <?php include 'customers.php'; ?>
             </div>
 
             <div id="analytics" class="content-section">
