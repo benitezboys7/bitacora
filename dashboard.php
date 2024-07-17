@@ -99,7 +99,7 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
             </div>
 
             <div id="customers" class="content-section">
-                <?php include 'customers.php'; ?>
+                
             </div>
 
             <div id="analytics" class="content-section">
