@@ -85,7 +85,7 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
 
         <!-- main section start-->
         <main>
-            <div id="dashboard" class="content-section active">
+            <div id="dashboard" class="content-section">
                 <h1>Dashboard</h1>
                 <div class="date">
                     <input type="date">
@@ -98,7 +98,7 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
                 </div>
             </div>
 
-            <div id="customers" class="content-section">
+            <div id="customers" class="content-section active">
                 <?php include 'customers.php'; ?>
             </div>
 
