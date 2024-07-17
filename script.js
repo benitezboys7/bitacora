@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const loginForm = document.getElementById("loginForm");
     const logoutButton = document.getElementById("logoutButton");
 
-    if (window.location.pathname.endsWith("index.html")) {
+    if (window.location.pathname.endsWith("index.html") || window.location.pathname === "/") {
         // Página de inicio de sesión
         if (loginForm) {
             loginForm.addEventListener("submit", function(event) {
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         }
     } else if (window.location.pathname.endsWith("dashboard.php")) {
-        // Página de dashboard
+        // Página del Dashboard
         const links = document.querySelectorAll("aside a.menu-link");
         const contentSections = document.querySelectorAll(".content-section");
 
@@ -82,19 +82,19 @@ document.addEventListener("DOMContentLoaded", function() {
                 })
                 .catch(error => console.error('Error:', error));
         }
-    
-        // Manejar logout
+
+        // Manejar el cierre de sesión
         if (logoutButton) {
             logoutButton.addEventListener("click", function(event) {
-                event.preventDefault(); // Evita la acción predeterminada del enlace
+                event.preventDefault();
 
-                fetch('logout.php', { // Asegúrate de que la URL sea correcta
+                fetch('logout.php', {
                     method: 'POST',
-                    credentials: 'same-origin' // Incluye cookies para la sesión
+                    credentials: 'same-origin'
                 })
                 .then(response => {
                     if (response.ok) {
-                        window.location.href = 'index.html'; // Redirige al inicio después de logout
+                        window.location.href = 'index.html';
                     } else {
                         console.error('Logout failed');
                     }
@@ -102,6 +102,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 .catch(error => console.error('Error:', error));
             });
         }
+
+        // Manejar la inactividad del usuario
+        inactivityTime();
     }
 
     function validateEmail(email) {
@@ -112,22 +115,20 @@ document.addEventListener("DOMContentLoaded", function() {
     function validatePassword(password) {
         return password.length >= 6;
     }
+
+    function inactivityTime() {
+        let time;
+        window.onload = resetTimer;
+        document.onmousemove = resetTimer;
+        document.onkeypress = resetTimer;
+
+        function logout() {
+            window.location.href = 'index.html';
+        }
+
+        function resetTimer() {
+            clearTimeout(time);
+            time = setTimeout(logout, 1800000); // 30 minutos
+        }
+    }
 });
-
-let inactivityTime = function () {
-    let time;
-    window.onload = resetTimer;
-    document.onmousemove = resetTimer;
-    document.onkeypress = resetTimer;
-
-    function logout() {
-        window.location.href = 'index.html'; // Redirige al usuario al inicio de sesión
-    }
-
-    function resetTimer() {
-        clearTimeout(time);
-        time = setTimeout(logout, 1800000); // 30 minutos
-    }
-};
-
-inactivityTime();
