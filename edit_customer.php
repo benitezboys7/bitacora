@@ -1,7 +1,11 @@
 <?php
-include 'db.php';
+$servername = "localhost";
+$username = "u686972174_admis151522";
+$password = "Admis.database151522!";
+$dbname = "u686972174_bitacoradb";
 
-$id = $_GET['id'];
+// Crear conexión
+$conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $conn->real_escape_string($_POST['name']);
