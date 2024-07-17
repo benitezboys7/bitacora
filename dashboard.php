@@ -42,6 +42,22 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
     </div>
 </div>
 
+<!-- Modal para editar cliente -->
+<div id="editCustomerModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Edit Customer</h2>
+        <form id="editCustomerForm" method="post" action="edit_customer.php">
+            <input type="hidden" id="editCustomerId" name="id">
+            <label for="editName">Name:</label>
+            <input type="text" id="editName" name="name" required>
+            <label for="editEmail">Email:</label>
+            <input type="email" id="editEmail" name="email" required>
+            <button type="submit">Update Customer</button>
+        </form>
+    </div>
+</div>
+
 <body>
     <div class="container">
         <!-- aside section start-->
