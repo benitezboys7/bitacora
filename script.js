@@ -2,8 +2,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const loginForm = document.getElementById("loginForm");
     const logoutButton = document.getElementById("logoutButton");
 
-    if (window.location.pathname.endsWith("index.html") || window.location.pathname === "/") {
-        // Login Page
+    if (window.location.pathname.endsWith("index.html")) {
+        // Página de inicio de sesión
         if (loginForm) {
             loginForm.addEventListener("submit", function(event) {
                 event.preventDefault();
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         }
     } else if (window.location.pathname.endsWith("dashboard.php")) {
-        // Dashboard Page
+        // Página de dashboard
         const links = document.querySelectorAll("aside a.menu-link");
         const contentSections = document.querySelectorAll(".content-section");
 
@@ -40,9 +40,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 event.preventDefault();
 
                 links.forEach(link => link.classList.remove("active"));
-                link.classList.add("active");
+                this.classList.add("active");
 
-                const targetId = link.getAttribute("data-target");
+                const targetId = this.getAttribute("data-target");
 
                 contentSections.forEach(section => {
                     if (section.id === targetId) {
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 .catch(error => console.error('Error:', error));
         }
     
-        // Handle logout
+        // Manejar logout
         if (logoutButton) {
             logoutButton.addEventListener("click", function(event) {
                 event.preventDefault(); // Evita la acción predeterminada del enlace
