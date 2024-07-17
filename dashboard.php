@@ -111,10 +111,11 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
                         </tr>
                     </thead>
                     <tbody>
-                        <?php include 'list_customers.php'; ?>
+                        <!-- Las filas de clientes se agregarán aquí por JavaScript -->
                     </tbody>
                 </table>
             </div>
+
 
             <div id="analytics" class="content-section">
                 <h1>Analytics</h1>

@@ -1,22 +1,21 @@
 <?php
 include 'db.php';
 
+header('Content-Type: application/json'); // Establece el tipo de contenido como JSON
+
 $sql = "SELECT * FROM customers";
 $result = $conn->query($sql);
 
+$customers = [];
 if ($result->num_rows > 0) {
-    // Output de datos por cada fila
+    // Recupera todos los datos y los almacena en un array
     while($row = $result->fetch_assoc()) {
-        echo "<tr>";
-        echo "<td>" . $row["id"] . "</td>";
-        echo "<td>" . $row["name"] . "</td>";
-        echo "<td>" . $row["email"] . "</td>";
-        echo "<td><a href='edit_customer.php?id=" . $row["id"] . "'>Edit</a> | <a href='delete_customer.php?id=" . $row["id"] . "'>Delete</a></td>";
-        echo "</tr>";
+        $customers[] = $row;
     }
-} else {
-    echo "<tr><td colspan='4'>No customers found</td></tr>";
 }
+
+// Convierte el array a JSON y lo devuelve
+echo json_encode($customers);
 
 $conn->close();
 ?>
