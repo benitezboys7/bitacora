@@ -112,8 +112,13 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 
         // Lógica para cargar datos de clientes
-        fetch("get_customers.php")
-            .then(response => response.json())
+            fetch("get_customers.php")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 const tbody = document.querySelector("#customers tbody");
                 tbody.innerHTML = ""; // Limpiar contenido previo
@@ -148,7 +153,10 @@ document.addEventListener("DOMContentLoaded", function() {
                     });
                 });
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+
     }
 });
 
