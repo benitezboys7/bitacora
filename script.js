@@ -126,6 +126,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Manejar la inactividad del usuario
         inactivityTime();
+
+        // Redirigir a la vista de "Customers" si se ha pasado el parámetro en la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('view') === 'customers') {
+            document.querySelector('aside a[data-target="customers"]').click();
+        }
     }
 
     function validateEmail(email) {
