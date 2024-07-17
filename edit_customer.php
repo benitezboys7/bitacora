@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $conn->close();
-    header("Location: customers.html"); // Redirigir después de actualizar
+    header("Location: dashboard.php"); // Redirigir después de actualizar
     exit();
 }
 
