@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const loginForm = document.getElementById("loginForm");
     const logoutButton = document.getElementById("logoutButton");
 
-    if (window.location.pathname.endsWith("index.html") || window.location.pathname === "https://app.admisadministradores.com/") {
+    if (window.location.pathname.endsWith("index.html") || window.location.pathname === "/") {
         // Login Page
         if (loginForm) {
             loginForm.addEventListener("submit", function(event) {
