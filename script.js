@@ -2,8 +2,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const loginForm = document.getElementById("loginForm");
     const logoutButton = document.getElementById("logoutButton");
 
-   
-
     if (window.location.pathname.endsWith("index.html")) {
         // Login Page
         if (loginForm) {
@@ -34,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     } else if (window.location.pathname.endsWith("dashboard.php")) {
         // Dashboard Page
-        const links = document.querySelectorAll("aside a");
+        const links = document.querySelectorAll("aside a.menu-link");
         const contentSections = document.querySelectorAll(".content-section");
 
         links.forEach(link => {
@@ -64,6 +62,7 @@ document.addEventListener("DOMContentLoaded", function() {
             fetch('crud.php?action=list')
                 .then(response => response.json())
                 .then(customers => {
+                    const customersTable = document.querySelector("#customers table");
                     if (customersTable) {
                         if (customers.length > 0) {
                             customersTable.innerHTML = customers.map(customer => `
