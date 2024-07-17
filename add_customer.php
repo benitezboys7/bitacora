@@ -1,28 +1,24 @@
 <?php
-include 'database.php';
+include 'db.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
     $email = $_POST['email'];
-    $phone = $_POST['phone'];
 
-    $sql = "INSERT INTO customers (name, email, phone) VALUES ('$name', '$email', '$phone')";
+    $sql = "INSERT INTO customers (name, email) VALUES ('$name', '$email')";
+
     if ($conn->query($sql) === TRUE) {
-        header("Location: customers.php");
-        exit();
+        echo "New record created successfully";
     } else {
-        echo "Error: " . $conn->error;
+        echo "Error: " . $sql . "<br>" . $conn->error;
     }
+
+    $conn->close();
 }
 ?>
 
-<h1>Add New Customer</h1>
 <form method="post" action="">
-    <label for="name">Name:</label>
-    <input type="text" name="name" required>
-    <label for="email">Email:</label>
-    <input type="email" name="email" required>
-    <label for="phone">Phone:</label>
-    <input type="text" name="phone">
-    <button type="submit">Add Customer</button>
+    Name: <input type="text" name="name" required><br>
+    Email: <input type="email" name="email" required><br>
+    <input type="submit" value="Add Customer">
 </form>
