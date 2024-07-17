@@ -1,37 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const loginForm = document.getElementById("loginForm");
     const logoutButton = document.getElementById("logoutButton");
 
-    if (window.location.pathname.endsWith("index.html") || window.location.pathname === "/") {
-        // Página de inicio de sesión
-        if (loginForm) {
-            loginForm.addEventListener("submit", function(event) {
-                event.preventDefault();
-                const email = document.getElementById("loginEmail").value;
-                const password = document.getElementById("loginPassword").value;
-
-                if (!validateEmail(email) || !validatePassword(password)) {
-                    alert("Invalid email or password format");
-                    return;
-                }
-
-                const formData = new FormData(loginForm);
-                fetch("login.php", {
-                    method: "POST",
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
-                    if (data.success) {
-                        window.location.href = "dashboard.php"; // Redirige a dashboard.php
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            });
-        }
-    } else if (window.location.pathname.endsWith("dashboard.php")) {
-        // Página del Dashboard
+    if (window.location.pathname.endsWith("dashboard.php")) {
         const links = document.querySelectorAll("aside a.menu-link");
         const contentSections = document.querySelectorAll(".content-section");
 
@@ -42,130 +12,132 @@ document.addEventListener("DOMContentLoaded", function() {
                 links.forEach(link => link.classList.remove("active"));
                 this.classList.add("active");
 
-                const target = this.getAttribute("data-target");
+                const targetId = this.getAttribute("data-target");
 
                 contentSections.forEach(section => {
-                    section.style.display = section.id === target ? "block" : "none";
+                    if (section.id === targetId) {
+                        section.classList.add("active");
+                        if (targetId === "customers") {
+                            loadCustomers();
+                        }
+                    } else {
+                        section.classList.remove("active");
+                    }
                 });
             });
         });
 
-        const defaultSection = document.getElementById("dashboard");
-        defaultSection.style.display = "block";
-        links[0].classList.add("active");
+        function loadCustomers() {
+            fetch('list_customers.php')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(customers => {
+                    const customersTable = document.querySelector("#customers table tbody");
+                    if (customersTable) {
+                        if (customers.length > 0) {
+                            customersTable.innerHTML = customers.map(customer => `
+                                <tr>
+                                    <td>${customer.id}</td>
+                                    <td>${customer.name}</td>
+                                    <td>${customer.email}</td>
+                                    <td>
+                                        <button onclick="editCustomer(${customer.id})">Edit</button>
+                                        <button onclick="deleteCustomer(${customer.id})">Delete</button>
+                                    </td>
+                                </tr>
+                            `).join('');
+                        } else {
+                            customersTable.innerHTML = '<tr><td colspan="4">No customers found</td></tr>';
+                        }
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
 
-        // Botón de cerrar sesión
+        window.editCustomer = function(id) {
+            fetch(`edit_customer.php?id=${id}`)
+                .then(response => response.text())
+                .then(html => {
+                    const modal = document.createElement('div');
+                    modal.classList.add('modal');
+                    modal.innerHTML = html;
+                    document.body.appendChild(modal);
+
+                    const closeButton = modal.querySelector('.close');
+                    closeButton.addEventListener('click', () => {
+                        document.body.removeChild(modal);
+                    });
+
+                    window.onclick = function(event) {
+                        if (event.target == modal) {
+                            document.body.removeChild(modal);
+                        }
+                    };
+                })
+                .catch(error => console.error('Error:', error));
+        };
+
+        window.deleteCustomer = function(id) {
+            if (confirm('Are you sure you want to delete this customer?')) {
+                fetch(`delete_customer.php?id=${id}`, {
+                    method: 'GET',
+                    credentials: 'same-origin'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        loadCustomers(); // Recargar la lista después de eliminar
+                    } else {
+                        console.error('Delete failed');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        };
+
         if (logoutButton) {
             logoutButton.addEventListener("click", function(event) {
                 event.preventDefault();
-                fetch("logout.php", {
-                    method: "POST"
+
+                fetch('logout.php', {
+                    method: 'POST',
+                    credentials: 'same-origin'
                 })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
-                    if (data.success) {
-                        window.location.href = "index.html"; // Redirige a index.html
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = 'index.html';
+                    } else {
+                        console.error('Logout failed');
                     }
                 })
                 .catch(error => console.error('Error:', error));
             });
         }
 
-        // Mostrar modal de añadir cliente
-        const addCustomerBtn = document.getElementById("addCustomerBtn");
-        const addCustomerModal = document.getElementById("addCustomerModal");
-        const closeAddModal = addCustomerModal.querySelector(".close");
+        inactivityTime();
 
-        addCustomerBtn.addEventListener("click", function(event) {
-            event.preventDefault();
-            addCustomerModal.style.display = "block";
-        });
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('view') === 'customers') {
+            document.querySelector('aside a[data-target="customers"]').click();
+        }
+    }
 
-        closeAddModal.addEventListener("click", function() {
-            addCustomerModal.style.display = "none";
-        });
+    function inactivityTime() {
+        let time;
+        window.onload = resetTimer;
+        document.onmousemove = resetTimer;
+        document.onkeypress = resetTimer;
 
-        // Mostrar modal de editar cliente
-        const editCustomerModal = document.getElementById("editCustomerModal");
-        const closeEditModal = editCustomerModal.querySelector(".close");
+        function logout() {
+            window.location.href = 'index.html';
+        }
 
-        closeEditModal.addEventListener("click", function() {
-            editCustomerModal.style.display = "none";
-        });
-
-        // Lógica para abrir modal de edición con datos de cliente
-        document.querySelectorAll(".edit-button").forEach(button => {
-            button.addEventListener("click", function(event) {
-                event.preventDefault();
-
-                const customerId = this.dataset.id;
-                const customerName = this.dataset.name;
-                const customerEmail = this.dataset.email;
-
-                document.getElementById("editCustomerId").value = customerId;
-                document.getElementById("editName").value = customerName;
-                document.getElementById("editEmail").value = customerEmail;
-
-                editCustomerModal.style.display = "block";
-            });
-        });
-
-        // Lógica para cargar datos de clientes
-            fetch("get_customers.php")
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                const tbody = document.querySelector("#customers tbody");
-                tbody.innerHTML = ""; // Limpiar contenido previo
-                data.customers.forEach(customer => {
-                    const tr = document.createElement("tr");
-                    tr.innerHTML = `
-                        <td>${customer.id}</td>
-                        <td>${customer.name}</td>
-                        <td>${customer.email}</td>
-                        <td>
-                            <a href="#" class="edit-button" data-id="${customer.id}" data-name="${customer.name}" data-email="${customer.email}">Edit</a>
-                            <a href="delete_customer.php?id=${customer.id}" class="delete-button">Delete</a>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-
-                // Añadir evento a los nuevos botones de editar
-                document.querySelectorAll(".edit-button").forEach(button => {
-                    button.addEventListener("click", function(event) {
-                        event.preventDefault();
-
-                        const customerId = this.dataset.id;
-                        const customerName = this.dataset.name;
-                        const customerEmail = this.dataset.email;
-
-                        document.getElementById("editCustomerId").value = customerId;
-                        document.getElementById("editName").value = customerName;
-                        document.getElementById("editEmail").value = customerEmail;
-
-                        editCustomerModal.style.display = "block";
-                    });
-                });
-            })
-            .catch(error => {
-                console.error('There was a problem with the fetch operation:', error);
-            });
-
+        function resetTimer() {
+            clearTimeout(time);
+            time = setTimeout(logout, 1800000); // 30 minutos
+        }
     }
 });
-
-function validateEmail(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(String(email).toLowerCase());
-}
-
-function validatePassword(password) {
-    // Añade las validaciones de contraseña que necesites
-    return password.length >= 6; // Ejemplo básico: longitud mínima de 6 caracteres
-}
