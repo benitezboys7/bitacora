@@ -21,3 +21,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
 }
 ?>
+<form method="post" action="">
+    Name: <input type="text" name="name" required><br>
+    Email: <input type="email" name="email" required><br>
+    <input type="submit" value="Add Customer">
+</form>
