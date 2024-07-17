@@ -47,26 +47,26 @@ document.addEventListener("DOMContentLoaded", function() {
                 contentSections.forEach(section => {
                     if (section.id === targetId) {
                         section.classList.add("active");
+                        if (targetId === "customers") {
+                            loadCustomers();
+                        }
                     } else {
                         section.classList.remove("active");
                     }
                 });
-
-                if (targetId === "customers") {
-                    loadCustomers();
-                }
             });
         });
 
         function loadCustomers() {
-            fetch('crud.php?action=list')
+            fetch('list_customers.php') // Cambia a la URL correcta para listar clientes
                 .then(response => response.json())
                 .then(customers => {
-                    const customersTable = document.querySelector("#customers table");
+                    const customersTable = document.querySelector("#customers table tbody");
                     if (customersTable) {
                         if (customers.length > 0) {
                             customersTable.innerHTML = customers.map(customer => `
                                 <tr>
+                                    <td>${customer.id}</td>
                                     <td>${customer.name}</td>
                                     <td>${customer.email}</td>
                                     <td>
@@ -76,12 +76,33 @@ document.addEventListener("DOMContentLoaded", function() {
                                 </tr>
                             `).join('');
                         } else {
-                            customersTable.innerHTML = '<tr><td colspan="3">No customers found</td></tr>';
+                            customersTable.innerHTML = '<tr><td colspan="4">No customers found</td></tr>';
                         }
                     }
                 })
                 .catch(error => console.error('Error:', error));
         }
+
+        window.editCustomer = function(id) {
+            window.location.href = `edit_customer.php?id=${id}`;
+        };
+
+        window.deleteCustomer = function(id) {
+            if (confirm('Are you sure you want to delete this customer?')) {
+                fetch(`delete_customer.php?id=${id}`, {
+                    method: 'GET',
+                    credentials: 'same-origin'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        loadCustomers(); // Recargar la lista después de eliminar
+                    } else {
+                        console.error('Delete failed');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        };
 
         // Manejar el cierre de sesión
         if (logoutButton) {
