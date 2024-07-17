@@ -1,30 +1,25 @@
 <?php
-session_start(); // Inicia la sesión
-
-// Verifica si el usuario ha iniciado sesión
+session_start();
 if (!isset($_SESSION['user_id'])) {
-    // Redirige al inicio de sesión si no hay una sesión activa
-    header("Location: index.html");
+    header("Location: index.php");
     exit();
 }
 
-$inactive = 1800; // Tiempo en segundos (30 minutos)
+$inactive = 1800;
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $inactive) {
-    // Última actividad fue hace más de 30 minutos
-    session_unset(); // Elimina todas las variables de sesión
-    session_destroy(); // Destruye la sesión
-    header("Location: index.html"); // Redirige al usuario al inicio de sesión
+    session_unset();
+    session_destroy();
+    header("Location: index.php");
     exit();
 }
-$_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última actividad
+$_SESSION['last_activity'] = time();
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>App Bitácora</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
@@ -39,7 +34,7 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
                     <span class="material-symbols-outlined">close</span>
                 </div>
             </div>
-            <!-- END TOP -->
+            <!--END TOP-->
 
             <div class="sidebar">
                 <a href="#" class="menu-link" data-target="dashboard">
@@ -85,13 +80,12 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
 
         <!-- main section start-->
         <main>
-            <div id="dashboard" class="content-section">
+            <div id="dashboard" class="content-section active">
                 <h1>Dashboard</h1>
                 <div class="date">
                     <input type="date">
                 </div>
                 <div class="insights">
-                    <!--start selling-->
                     <div class="sales">
                         <span class="material-symbols-outlined"></span>
                     </div>
@@ -99,149 +93,31 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
             </div>
 
             <div id="customers" class="content-section">
-            <?php
-include 'database.php';
-
-// Manejo de solicitudes POST para agregar o actualizar clientes
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['add_customer'])) {
-        // Agregar nuevo cliente
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-        $phone = $_POST['phone'];
-
-        $sql = "INSERT INTO customers (name, email, phone) VALUES ('$name', '$email', '$phone')";
-        if ($conn->query($sql) === TRUE) {
-            header("Location: ?section=customers"); // Redirige a la misma página para evitar el reenvío del formulario
-            exit();
-        } else {
-            echo "Error: " . $conn->error;
-        }
-    } elseif (isset($_POST['edit_customer'])) {
-        // Editar cliente existente
-        $id = $_POST['id'];
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-        $phone = $_POST['phone'];
-
-        $sql = "UPDATE customers SET name='$name', email='$email', phone='$phone' WHERE id=$id";
-        if ($conn->query($sql) === TRUE) {
-            header("Location: ?section=customers"); // Redirige a la misma página para evitar el reenvío del formulario
-            exit();
-        } else {
-            echo "Error: " . $conn->error;
-        }
-    }
-}
-
-// Manejo de solicitudes GET para eliminar o editar clientes
-if (isset($_GET['action']) && $_GET['action'] == 'delete') {
-    $id = $_GET['id'];
-    $sql = "DELETE FROM customers WHERE id=$id";
-    if ($conn->query($sql) === TRUE) {
-        header("Location: ?section=customers"); // Redirige a la misma página para evitar el reenvío del formulario
-        exit();
-    } else {
-        echo "Error: " . $conn->error;
-    }
-} elseif (isset($_GET['action']) && $_GET['action'] == 'edit') {
-    $id = $_GET['id'];
-    $sql = "SELECT * FROM customers WHERE id=$id";
-    $result = $conn->query($sql);
-    $customer = $result->fetch_assoc();
-}
-?>
-
-<h1>Customers</h1>
-
-<!-- Formulario para agregar cliente -->
-<form method="post" action="">
-    <h2>Add New Customer</h2>
-    <label for="name">Name:</label>
-    <input type="text" name="name" required>
-    <label for="email">Email:</label>
-    <input type="email" name="email" required>
-    <label for="phone">Phone:</label>
-    <input type="text" name="phone">
-    <button type="submit" name="add_customer">Add Customer</button>
-</form>
-
-<!-- Formulario para editar cliente -->
-<?php if (isset($customer)): ?>
-<form method="post" action="">
-    <h2>Edit Customer</h2>
-    <input type="hidden" name="id" value="<?php echo $customer['id']; ?>">
-    <label for="name">Name:</label>
-    <input type="text" name="name" value="<?php echo $customer['name']; ?>" required>
-    <label for="email">Email:</label>
-    <input type="email" name="email" value="<?php echo $customer['email']; ?>" required>
-    <label for="phone">Phone:</label>
-    <input type="text" name="phone" value="<?php echo $customer['phone']; ?>">
-    <button type="submit" name="edit_customer">Update Customer</button>
-</form>
-<?php endif; ?>
-
-<!-- Mostrar lista de clientes -->
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-        $sql = "SELECT * FROM customers";
-        $result = $conn->query($sql);
-        while($row = $result->fetch_assoc()):
-        ?>
-        <tr>
-            <td><?php echo $row['id']; ?></td>
-            <td><?php echo $row['name']; ?></td>
-            <td><?php echo $row['email']; ?></td>
-            <td><?php echo $row['phone']; ?></td>
-            <td>
-                <a href="?section=customers&action=edit&id=<?php echo $row['id']; ?>">Edit</a> |
-                <a href="?section=customers&action=delete&id=<?php echo $row['id']; ?>" onclick="return confirm('Are you sure?');">Delete</a>
-            </td>
-        </tr>
-        <?php endwhile; ?>
-    </tbody>
-</table>
-
+                <!-- Content loaded via AJAX -->
             </div>
 
             <div id="analytics" class="content-section">
                 <h1>Analytics</h1>
-                <!-- Contenido de Analytics -->
             </div>
 
             <div id="messages" class="content-section">
                 <h1>Messages</h1>
-                <!-- Contenido de Messages -->
             </div>
 
             <div id="products" class="content-section">
                 <h1>Products</h1>
-                <!-- Contenido de Products -->
             </div>
 
             <div id="reports" class="content-section">
                 <h1>Reports</h1>
-                <!-- Contenido de Reports -->
             </div>
 
             <div id="settings" class="content-section">
                 <h1>Settings</h1>
-                <!-- Contenido de Settings -->
             </div>
 
             <div id="add-product" class="content-section">
                 <h1>Add Product</h1>
-                <!-- Contenido de Add Product -->
             </div>
         </main>
         <!-- main section end-->
@@ -252,6 +128,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete') {
         </div>
         <!-- right section end-->
     </div>
-    <script src="script.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
