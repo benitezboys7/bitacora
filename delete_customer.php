@@ -12,6 +12,6 @@ if ($conn->query($sql) === TRUE) {
 }
 
 $conn->close();
-header("Location: dashboard.php"); // Redirigir después de eliminar
+header("Location: dashboard.php#customers"); // Redirigir después de eliminar
 exit();
 ?>
