@@ -8,7 +8,15 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-
+$inactive = 1800; // Tiempo en segundos (30 minutos)
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $inactive) {
+    // Última actividad fue hace más de 30 minutos
+    session_unset(); // Elimina todas las variables de sesión
+    session_destroy(); // Destruye la sesión
+    header("Location: index.html"); // Redirige al usuario al inicio de sesión
+    exit();
+}
+$_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última actividad
 ?>
 
 <!DOCTYPE html>

@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const loginForm = document.getElementById("loginForm");
     const logoutButton = document.getElementById("logoutButton");
 
-    if (window.location.pathname.endsWith("index.html")) {
+    if (window.location.pathname.endsWith("index.html") || window.location.pathname === "https://app.admisadministradores.com/") {
         // Login Page
         if (loginForm) {
             loginForm.addEventListener("submit", function(event) {
@@ -114,3 +114,20 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
+let inactivityTime = function () {
+    let time;
+    window.onload = resetTimer;
+    document.onmousemove = resetTimer;
+    document.onkeypress = resetTimer;
+
+    function logout() {
+        window.location.href = 'index.html'; // Redirige al usuario al inicio de sesión
+    }
+
+    function resetTimer() {
+        clearTimeout(time);
+        time = setTimeout(logout, 1800000); // 30 minutos
+    }
+};
+
+inactivityTime();
