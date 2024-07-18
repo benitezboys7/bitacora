@@ -14,7 +14,7 @@ body {
 }
 
 .login-register-container {
-    background-color: #ffffff;
+    background-color: #000000;
     padding: 2rem;
     border-radius: var(--border-radius-2);
     box-shadow: var(--box-shadow);
@@ -24,7 +24,7 @@ body {
 }
 
 .login-register-container h2 {
-    color: #000000;
+    color: #ffffff;
     margin-bottom: 1rem;
 }
 
@@ -47,7 +47,7 @@ body {
 }
 
 .login-register-container button {
-    width: 100%;
+    width: 420px;
     padding: 0.75rem;
     background-color: #E23642;
     color: #ffffff;
@@ -64,7 +64,7 @@ body {
 
 /* Agregar logo */
 .login-register-container::before {
-    content: url('images/ADMIS_LogoPNG.png'); /* Reemplaza 'ruta/al/logo.png' con la ruta a tu logo */
+    content: url('images/ADMIS_Completo_Wh.png'); /* Reemplaza 'ruta/al/logo.png' con la ruta a tu logo */
     display: block;
     margin: 0 auto 1rem;
     max-width: 150px;
