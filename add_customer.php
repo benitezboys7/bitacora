@@ -1,6 +1,7 @@
 <?php
 include 'db.php';
 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
     $email = $_POST['email'];
@@ -11,6 +12,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($stmt->execute()) {
         // Redirige a la vista de clientes en el dashboard después de agregar el cliente
+        $message = "Operation completed successfully!";
+        echo "<script type='text/javascript'>alert('$message');</script>";
+
         header('Location: dashboard.php?view=customers');
         exit();
     } else {
