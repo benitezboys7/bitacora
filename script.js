@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
             messageContainer.classList.add("hidden");
             // En el caso de logout, redirige a la página deseada después de 2 segundos
             window.location.href = "dashboard.php";
-        }, 2000); // 2000 ms = 2 segundos
+        }, 1000); // 1000 ms = 1 segundos
     }
 
     if (window.location.pathname.endsWith("index.html") || window.location.pathname === "/") {

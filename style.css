@@ -288,16 +288,15 @@ aside .top div.close{
 }
 
 #messageContainer {
-    position: fixed;
-    top: 10px; /* Ajusta la distancia desde el borde superior */
-    right: 10px; /* Ajusta la distancia desde el borde derecho */
-    background-color: #f44336; /* Fondo rojo para el mensaje de error */
-    color: white;
-    padding: 15px 25px;
-    border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    font-size: 16px;
-    text-align: center;
-    display: none; /* Inicialmente oculto */
+    position: fixed !important;
+    top: 10px !important; /* Ajusta la distancia desde el borde superior */
+    right: 10px !important; /* Ajusta la distancia desde el borde derecho */
+    background-color: #4caf50 !important; /* Fondo verde */
+    color: white !important;
+    padding: 15px 25px !important;
+    border-radius: 5px !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2) !important;
+    z-index: 1000 !important;
+    font-size: 16px !important;
+    text-align: center !important;
 }

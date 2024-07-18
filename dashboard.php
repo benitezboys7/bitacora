@@ -109,6 +109,7 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
                 <a href="#" id="logoutButton" class="menu-link">
                     <span class="material-symbols-outlined">logout</span>
                     <h3>Logout</h3>
+                    <div id="messageContainer" class="hidden"></div>
                 </a>
             </div>
         </aside>
@@ -188,7 +189,7 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
         <!-- right section end-->
     </div>
 
-    <div id="messageContainer" class="hidden"></div>
+    
     <script src="script.js"></script>
 </body>
 </html>
