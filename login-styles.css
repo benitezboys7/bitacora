@@ -1,8 +1,8 @@
 /* Solo los estilos del login */
 
 body {
+    background-color: #000000;
     font-family: 'Poppins', sans-serif;
-    width: 100vw;
     height: 100vh;
     font-size: 0.88rem;
     user-select: none;
@@ -14,7 +14,6 @@ body {
 }
 
 .login-register-container {
-    background-color: #000000;
     padding: 2rem;
     border-radius: var(--border-radius-2);
     box-shadow: var(--box-shadow);
