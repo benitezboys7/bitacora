@@ -7,7 +7,6 @@ $sql = "DELETE FROM customers WHERE id=$id";
 
 if ($conn->query($sql) === TRUE) {
     echo "Record deleted successfully";
-    header("Location: dashboard.php?view=customers");
 } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
 }
