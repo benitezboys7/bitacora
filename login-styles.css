@@ -78,7 +78,7 @@ body {
 #messageContainer {
     position: fixed;
     top: 10px; /* Ajusta la distancia desde el borde superior */
-    left: 10px; /* Ajusta la distancia desde el borde izquierdo */
+    right: 10px; /* Ajusta la distancia desde el borde derecho */
     background-color: #4caf50; /* Fondo verde */
     color: white;
     padding: 15px 25px;
