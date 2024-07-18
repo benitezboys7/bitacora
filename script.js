@@ -159,7 +159,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         document.getElementById("editEmail").value = customerEmail;
 
                         editCustomerModal.style.display = "block";
-                        window.location.href = "dashboard.php?view=customers";
+                        
                     });
                 });
             })
