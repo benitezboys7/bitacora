@@ -194,6 +194,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 if (data.success) {
                                     alert("Customer deleted successfully");
                                     loadCustomers(); // Recargar la lista de clientes
+                                    window.location.reload(); // Recargar la página
                                 } else {
                                     alert("Error deleting customer: " + data.message);
                                 }
