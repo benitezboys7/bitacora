@@ -13,6 +13,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($conn->query($sql) === TRUE) {
         $response['success'] = true;
         $response['message'] = "Record updated successfully";
+        header('Location: dashboard.php?view=customers');
+        exit(); // Asegúrate de llamar a exit() después de header() para detener la ejecución del script
     } else {
         $response['message'] = "Error: " . $sql . "<br>" . $conn->error;
     }
