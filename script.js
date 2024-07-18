@@ -3,12 +3,17 @@ document.addEventListener("DOMContentLoaded", function() {
     const messageContainer = document.getElementById("messageContainer");
 
     function showMessage(message) {
+        if (!messageContainer) {
+            console.error("Message container element not found.");
+            return;
+        }
         messageContainer.textContent = message;
         messageContainer.classList.remove("hidden");
 
         setTimeout(() => {
             messageContainer.classList.add("hidden");
-        }, 5000); // Ocultar el mensaje después de 2 segundos
+            window.location.href = "dashboard.php"; // Redirige a dashboard.php después de 2 segundos
+        }, 2000); // Ocultar el mensaje después de 2 segundos
     }
 
     function getParameterByName(name) {
@@ -37,11 +42,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 .then(response => response.json())
                 .then(data => {
                     showMessage(data.message);
-                    if (data.success) {
-                        setTimeout(() => {
-                            window.location.href = "dashboard.php"; // Redirige a dashboard.php después de 0.5 segundos
-                        }, 500);
-                    }
                 })
                 .catch(error => console.error('Error:', error));
             });
@@ -200,7 +200,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function validateEmail(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const re = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
     return re.test(email);
 }
 
