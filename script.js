@@ -2,6 +2,11 @@ document.addEventListener("DOMContentLoaded", function() {
     const loginForm = document.getElementById("loginForm");
     const logoutButton = document.getElementById("logoutButton");
 
+    function getParameterByName(name) {
+        const url = new URL(window.location.href);
+        return url.searchParams.get(name);
+    }
+
     if (window.location.pathname.endsWith("index.html") || window.location.pathname === "/") {
         // Página de inicio de sesión
         if (loginForm) {
@@ -47,12 +52,15 @@ document.addEventListener("DOMContentLoaded", function() {
                 contentSections.forEach(section => {
                     section.style.display = section.id === target ? "block" : "none";
                 });
+
+                history.pushState(null, '', 'dashboard.php?view=' + target);
             });
         });
 
-        const defaultSection = document.getElementById("dashboard");
-        defaultSection.style.display = "block";
-        links[0].classList.add("active");
+        // Mostrar la sección predeterminada o la sección indicada en el parámetro 'view'
+        const defaultView = getParameterByName('view') || 'dashboard';
+        document.getElementById(defaultView).style.display = 'block';
+        document.querySelector(`aside a.menu-link[data-target=${defaultView}]`).classList.add('active');
 
         // Botón de cerrar sesión
         if (logoutButton) {
@@ -77,47 +85,55 @@ document.addEventListener("DOMContentLoaded", function() {
         const addCustomerModal = document.getElementById("addCustomerModal");
         const closeAddModal = addCustomerModal.querySelector(".close");
 
-        addCustomerBtn.addEventListener("click", function(event) {
-            event.preventDefault();
-            addCustomerModal.style.display = "block";
-        });
+        if (addCustomerBtn) {
+            addCustomerBtn.addEventListener("click", function(event) {
+                event.preventDefault();
+                addCustomerModal.style.display = "block";
+            });
+        }
 
-        closeAddModal.addEventListener("click", function() {
-            addCustomerModal.style.display = "none";
-        });
+        if (closeAddModal) {
+            closeAddModal.addEventListener("click", function() {
+                addCustomerModal.style.display = "none";
+            });
+        }
 
         // Mostrar modal de editar cliente
         const editCustomerModal = document.getElementById("editCustomerModal");
         const editCustomerForm = document.getElementById("editCustomerForm");
         const closeEditModal = editCustomerModal.querySelector(".close");
 
-        closeEditModal.addEventListener("click", function() {
-            editCustomerModal.style.display = "none";
-        });
+        if (closeEditModal) {
+            closeEditModal.addEventListener("click", function() {
+                editCustomerModal.style.display = "none";
+            });
+        }
 
         // Enviar datos del formulario de edición mediante AJAX
-        editCustomerForm.addEventListener("submit", function(event) {
-            event.preventDefault();
+        if (editCustomerForm) {
+            editCustomerForm.addEventListener("submit", function(event) {
+                event.preventDefault();
 
-            const formData = new FormData(editCustomerForm);
+                const formData = new FormData(editCustomerForm);
 
-            fetch("edit_customer.php", {
-                method: "POST",
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert("Customer updated successfully");
-                    editCustomerModal.style.display = "none";
-                    loadCustomers(); // Recargar la lista de clientes
-                    window.location.href = 'dashboard.php?view=customers';
-                } else {
-                    alert("Error updating customer: " + data.message);
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        });
+                fetch("edit_customer.php", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Customer updated successfully");
+                        editCustomerModal.style.display = "none";
+                        loadCustomers(); // Recargar la lista de clientes
+                        window.location.href = 'dashboard.php?view=customers';
+                    } else {
+                        alert("Error updating customer: " + data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        }
 
         // Cargar datos de clientes
         function loadCustomers() {
@@ -159,7 +175,6 @@ document.addEventListener("DOMContentLoaded", function() {
                         document.getElementById("editEmail").value = customerEmail;
 
                         editCustomerModal.style.display = "block";
-                        
                     });
                 });
             })
