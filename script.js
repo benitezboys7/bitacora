@@ -88,30 +88,38 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Mostrar modal de editar cliente
         const editCustomerModal = document.getElementById("editCustomerModal");
+        const editCustomerForm = document.getElementById("editCustomerForm");
         const closeEditModal = editCustomerModal.querySelector(".close");
 
         closeEditModal.addEventListener("click", function() {
             editCustomerModal.style.display = "none";
         });
 
-        // Lógica para abrir modal de edición con datos de cliente
-        document.querySelectorAll(".edit-button").forEach(button => {
-            button.addEventListener("click", function(event) {
-                event.preventDefault();
+        // Enviar datos del formulario de edición mediante AJAX
+        editCustomerForm.addEventListener("submit", function(event) {
+            event.preventDefault();
 
-                const customerId = this.dataset.id;
-                const customerName = this.dataset.name;
-                const customerEmail = this.dataset.email;
+            const formData = new FormData(editCustomerForm);
 
-                document.getElementById("editCustomerId").value = customerId;
-                document.getElementById("editName").value = customerName;
-                document.getElementById("editEmail").value = customerEmail;
-
-                editCustomerModal.style.display = "block";
-            });
+            fetch("edit_customer.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Customer updated successfully");
+                    editCustomerModal.style.display = "none";
+                    loadCustomers(); // Recargar la lista de clientes
+                } else {
+                    alert("Error updating customer: " + data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
         });
 
-        // Lógica para cargar datos de clientes
+        // Cargar datos de clientes
+        function loadCustomers() {
             fetch("get_customers.php")
             .then(response => {
                 if (!response.ok) {
@@ -156,16 +164,19 @@ document.addEventListener("DOMContentLoaded", function() {
             .catch(error => {
                 console.error('There was a problem with the fetch operation:', error);
             });
+        }
 
+        // Inicializar la carga de clientes al cargar la página
+        loadCustomers();
     }
 });
 
 function validateEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(String(email).toLowerCase());
+    return re.test(email);
 }
 
 function validatePassword(password) {
-    // Añade las validaciones de contraseña que necesites
-    return password.length >= 6; // Ejemplo básico: longitud mínima de 6 caracteres
+    // Aquí puedes agregar validaciones adicionales para la contraseña si lo deseas
+    return password.length >= 6; // Ejemplo: longitud mínima de 6 caracteres
 }

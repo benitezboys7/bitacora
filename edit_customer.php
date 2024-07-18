@@ -1,33 +1,25 @@
 <?php
 include 'db.php';
 
-$id = $_GET['id'];
+$response = array('success' => false, 'message' => '');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id = $_POST['id'];
     $name = $_POST['name'];
     $email = $_POST['email'];
 
     $sql = "UPDATE customers SET name='$name', email='$email' WHERE id=$id";
 
     if ($conn->query($sql) === TRUE) {
-        echo "Record updated successfully";
+        $response['success'] = true;
+        $response['message'] = "Record updated successfully";
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        $response['message'] = "Error: " . $sql . "<br>" . $conn->error;
     }
-
     $conn->close();
-    header("Location: dashboard.php?view=customers"); // Redirigir después de actualizar
-    exit();
+} else {
+    $response['message'] = "Invalid request method";
 }
 
-$sql = "SELECT * FROM customers WHERE id=$id";
-$result = $conn->query($sql);
-$customer = $result->fetch_assoc();
-
+echo json_encode($response);
 ?>
-
-<form method="post" action="">
-    Name: <input type="text" name="name" value="<?php echo $customer['name']; ?>" required><br>
-    Email: <input type="email" name="email" value="<?php echo $customer['email']; ?>" required><br>
-    <input type="submit" value="Update Customer">
-</form>
