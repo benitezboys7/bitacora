@@ -3,6 +3,11 @@ session_start();
 session_unset(); // Elimina todas las variables de sesión
 session_destroy(); // Destruye la sesión
 
-header("Location: index.html"); // Redirige al usuario a la página de inicio
+// Devolver una respuesta JSON
+header('Content-Type: application/json');
+echo json_encode(array(
+    'success' => true,
+    'message' => 'Logged out successfully'
+));
 exit();
 ?>

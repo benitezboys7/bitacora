@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 .then(data => {
                     alert(data.message);
                     if (data.success) {
-                        window.location.href = "index.html"; // Redirige a index.html
+                        window.location.href = "index.html"; // Redirige a index.html después de cerrar sesión
                     }
                 })
                 .catch(error => console.error('Error:', error));
