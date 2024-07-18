@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         setTimeout(() => {
             messageContainer.classList.add("hidden");
-        }, 2000); // Ocultar el mensaje después de 2 segundos
+        }, 5000); // Ocultar el mensaje después de 2 segundos
     }
 
     function getParameterByName(name) {
