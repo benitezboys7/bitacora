@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
         setTimeout(() => {
             messageContainer.classList.add("hidden");
             window.location.href = "dashboard.php"; // Redirige a dashboard.php después de 2 segundos
-        }, 2000); // Ocultar el mensaje después de 2 segundos
+        }, 1000); // Ocultar el mensaje después de 2 segundos
     }
 
     function getParameterByName(name) {
