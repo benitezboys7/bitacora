@@ -2,7 +2,6 @@
 include 'db.php';
 
 $response = array('success' => false, 'message' => '');
-$redirect_url = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = $_POST['id'];
@@ -14,7 +13,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($conn->query($sql) === TRUE) {
         $response['success'] = true;
         $response['message'] = "Record updated successfully";
-        $redirect_url = 'dashboard.php?view=customers'; // Establecer URL de redirección
+      
+
     } else {
         $response['message'] = "Error: " . $sql . "<br>" . $conn->error;
     }
@@ -24,10 +24,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 echo json_encode($response);
-
-// Redirigir después de completar el procesamiento
-if ($redirect_url) {
-    header('Location: ' . $redirect_url);
-    exit();
-}
 ?>
