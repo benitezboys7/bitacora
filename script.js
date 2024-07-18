@@ -29,7 +29,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 .then(data => {
                     alert(data.message);
                     if (data.success) {
-                        window.location.href = "dashboard.php"; // Redirige a dashboard.php
+                        setTimeout(() => {
+                            window.location.href = data.redirect;
+                        }, 500); // 0.5 segundos
                     }
                 })
                 .catch(error => console.error('Error:', error));

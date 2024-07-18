@@ -25,7 +25,7 @@ if ($result->num_rows > 0) {
     if ($password === $row['password']) { // Asegúrate de que el método de verificación de contraseña coincida con el almacenamiento
         $_SESSION['user_id'] = $row['id'];
         $_SESSION['user_email'] = $row['email'];
-        $response = ["success" => true, "message" => "Login exitoso!"];
+        $response = ["success" => true, "message" => "Login exitoso!", "redirect" => "dashboard.php"]; // Cambia 'dashboard.php' por la URL deseada
     } else {
         $response = ["success" => false, "message" => "Contraseña incorrecta"];
     }
