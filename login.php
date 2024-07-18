@@ -1,10 +1,7 @@
 <?php
 session_start();
 
-$servername = "localhost";
-$username = "u686972174_admis151522";
-$password = "Admis.database151522!";
-$dbname = "u686972174_bitacoradb";
+include 'db.php';
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
