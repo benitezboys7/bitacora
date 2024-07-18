@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         <td>${customer.email}</td>
                         <td>
                             <a href="#" class="edit-button" data-id="${customer.id}" data-name="${customer.name}" data-email="${customer.email}">Edit</a>
-                            <a href="delete_customer.php?id=${customer.id}" class="delete-button">Delete</a>
+                            <a href="#" class="delete-button" data-id="${customer.id}">Delete</a>
                         </td>
                     `;
                     tbody.appendChild(tr);
@@ -175,6 +175,31 @@ document.addEventListener("DOMContentLoaded", function() {
                         document.getElementById("editEmail").value = customerEmail;
 
                         editCustomerModal.style.display = "block";
+                    });
+                });
+
+                // Añadir evento a los nuevos botones de eliminar
+                document.querySelectorAll(".delete-button").forEach(button => {
+                    button.addEventListener("click", function(event) {
+                        event.preventDefault();
+
+                        const customerId = this.dataset.id;
+                        const confirmation = confirm("Are you sure you want to delete this customer?");
+                        if (confirmation) {
+                            fetch(`delete_customer.php?id=${customerId}`, {
+                                method: "GET"
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    alert("Customer deleted successfully");
+                                    loadCustomers(); // Recargar la lista de clientes
+                                } else {
+                                    alert("Error deleting customer: " + data.message);
+                                }
+                            })
+                            .catch(error => console.error('Error:', error));
+                        }
                     });
                 });
             })
