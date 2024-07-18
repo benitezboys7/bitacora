@@ -27,6 +27,37 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
+<!-- Modal -->
+<div id="addCustomerModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Add New Customer</h2>
+        <form id="addCustomerForm" method="post" action="add_customer.php">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <button type="submit">Add Customer</button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal para editar cliente -->
+<div id="editCustomerModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Edit Customer</h2>
+        <form id="editCustomerForm" method="post" action="edit_customer.php">
+            <input type="hidden" id="editCustomerId" name="id">
+            <label for="editName">Name:</label>
+            <input type="text" id="editName" name="name" required>
+            <label for="editEmail">Email:</label>
+            <input type="email" id="editEmail" name="email" required>
+            <button type="submit">Update Customer</button>
+        </form>
+    </div>
+</div>
+
 <body>
     <div class="container">
         <!-- aside section start-->
