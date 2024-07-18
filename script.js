@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     alert("Customer updated successfully");
                     editCustomerModal.style.display = "none";
                     loadCustomers(); // Recargar la lista de clientes
-                    window.location.href = "dashboard.php?view=customers";
+                    window.location.href = 'dashboard.php?view=customers';
                 } else {
                     alert("Error updating customer: " + data.message);
                 }
