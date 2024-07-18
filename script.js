@@ -1,6 +1,15 @@
 document.addEventListener("DOMContentLoaded", function() {
     const loginForm = document.getElementById("loginForm");
-    const logoutButton = document.getElementById("logoutButton");
+    const messageContainer = document.getElementById("messageContainer");
+
+    function showMessage(message) {
+        messageContainer.textContent = message;
+        messageContainer.classList.remove("hidden");
+
+        setTimeout(() => {
+            messageContainer.classList.add("hidden");
+        }, 2000); // Ocultar el mensaje después de 2 segundos
+    }
 
     function getParameterByName(name) {
         const url = new URL(window.location.href);
@@ -16,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 const password = document.getElementById("loginPassword").value;
 
                 if (!validateEmail(email) || !validatePassword(password)) {
-                    alert("Invalid email or password format");
+                    showMessage("Invalid email or password format");
                     return;
                 }
 
@@ -27,11 +36,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 })
                 .then(response => response.json())
                 .then(data => {
-                    alert(data.message);
+                    showMessage(data.message);
                     if (data.success) {
                         setTimeout(() => {
-                            window.location.href = data.redirect;
-                        }, 500); // 0.5 segundos
+                            window.location.href = "dashboard.php"; // Redirige a dashboard.php después de 0.5 segundos
+                        }, 500);
                     }
                 })
                 .catch(error => console.error('Error:', error));
