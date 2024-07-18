@@ -187,6 +187,8 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
         </div>
         <!-- right section end-->
     </div>
+
+    <div id="messageContainer" class="hidden"></div>
     <script src="script.js"></script>
 </body>
 </html>

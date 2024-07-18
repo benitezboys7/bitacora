@@ -1,24 +1,17 @@
 document.addEventListener("DOMContentLoaded", function() {
     const loginForm = document.getElementById("loginForm");
-    const messageContainer = document.getElementById("messageContainer");
+    const logoutButton = document.getElementById("logoutButton");
 
     function showMessage(message) {
-        if (!messageContainer) {
-            console.error("Message container element not found.");
-            return;
-        }
+        const messageContainer = document.getElementById("messageContainer");
         messageContainer.textContent = message;
         messageContainer.classList.remove("hidden");
 
         setTimeout(() => {
             messageContainer.classList.add("hidden");
-            window.location.href = "dashboard.php"; // Redirige a dashboard.php después de 2 segundos
-        }, 1000); // Ocultar el mensaje después de 2 segundos
-    }
-
-    function getParameterByName(name) {
-        const url = new URL(window.location.href);
-        return url.searchParams.get(name);
+            // En el caso de logout, redirige a la página deseada después de 2 segundos
+            window.location.href = "dashboard.php";
+        }, 2000); // 2000 ms = 2 segundos
     }
 
     if (window.location.pathname.endsWith("index.html") || window.location.pathname === "/") {
@@ -30,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 const password = document.getElementById("loginPassword").value;
 
                 if (!validateEmail(email) || !validatePassword(password)) {
-                    showMessage("Invalid email or password format");
+                    alert("Invalid email or password format");
                     return;
                 }
 
@@ -42,6 +35,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 .then(response => response.json())
                 .then(data => {
                     showMessage(data.message);
+                    if (data.success) {
+                        setTimeout(() => {
+                            window.location.href = "dashboard.php"; // Redirige a dashboard.php después de mostrar el mensaje
+                        }, 2000);
+                    }
                 })
                 .catch(error => console.error('Error:', error));
             });
@@ -77,14 +75,16 @@ document.addEventListener("DOMContentLoaded", function() {
         if (logoutButton) {
             logoutButton.addEventListener("click", function(event) {
                 event.preventDefault();
+
                 fetch("logout.php", {
                     method: "POST"
                 })
                 .then(response => response.json())
                 .then(data => {
-                    alert(data.message);
                     if (data.success) {
-                        window.location.href = "index.html"; // Redirige a index.html después de cerrar sesión
+                        showMessage("Logout exitoso!"); // Muestra el mensaje de logout exitoso
+                    } else {
+                        console.error("Error en el logout: ", data.message);
                     }
                 })
                 .catch(error => console.error('Error:', error));
@@ -197,14 +197,19 @@ document.addEventListener("DOMContentLoaded", function() {
         // Inicializar la carga de clientes al cargar la página
         loadCustomers();
     }
+
+    function getParameterByName(name) {
+        const url = new URL(window.location.href);
+        return url.searchParams.get(name);
+    }
+
+    function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+
+    function validatePassword(password) {
+        // Aquí puedes agregar validaciones adicionales para la contraseña si lo deseas
+        return password.length >= 6; // Ejemplo: longitud mínima de 6 caracteres
+    }
 });
-
-function validateEmail(email) {
-    const re = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
-    return re.test(email);
-}
-
-function validatePassword(password) {
-    // Aquí puedes agregar validaciones adicionales para la contraseña si lo deseas
-    return password.length >= 6; // Ejemplo: longitud mínima de 6 caracteres
-}
