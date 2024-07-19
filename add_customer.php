@@ -1,14 +1,14 @@
 <?php
 // archivo.php
 
-session_start();
+session_start(); // Inicia la sesión
 
-if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true) {
-    header('HTTP/1.0 403 Forbidden');
-    echo "No tienes permiso para acceder a esta página.";
-    exit;
+// Verifica si el usuario ha iniciado sesión
+if (!isset($_SESSION['user_id'])) {
+    // Redirige al inicio de sesión si no hay una sesión activa
+    header("Location: index.php");
+    exit();
 }
-
 // Código backend
 include 'db.php';
 
