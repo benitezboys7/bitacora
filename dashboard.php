@@ -4,7 +4,7 @@ session_start(); // Inicia la sesión
 // Verifica si el usuario ha iniciado sesión
 if (!isset($_SESSION['user_id'])) {
     // Redirige al inicio de sesión si no hay una sesión activa
-    header("Location: index.html");
+    header("Location: index.php");
     exit();
 }
 
@@ -13,7 +13,7 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) >
     // Última actividad fue hace más de 30 minutos
     session_unset(); // Elimina todas las variables de sesión
     session_destroy(); // Destruye la sesión
-    header("Location: index.html"); // Redirige al usuario al inicio de sesión
+    header("Location: index.php"); // Redirige al usuario al inicio de sesión
     exit();
 }
 $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última actividad
@@ -24,7 +24,10 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
 <head>
     <meta charset="UTF-8">
     <title>App Bitácora</title>
-    <link rel="stylesheet" href="stylev1.0.0.css">
+    <?php
+        $version = time(); // Utiliza la fecha y hora actual para la versión
+    ?>
+    <link rel="stylesheet" href="style.css?v=<?php echo $version; ?>">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <!-- Modal -->

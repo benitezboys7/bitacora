@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }, 1000); // 1000 ms = 1 segundos
     }
 
-    if (window.location.pathname.endsWith("index.html") || window.location.pathname === "/") {
+    if (window.location.pathname.endsWith("index.php") || window.location.pathname === "/") {
         // Página de inicio de sesión
         if (loginForm) {
             loginForm.addEventListener("submit", function(event) {
