@@ -190,6 +190,6 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
     </div>
 
     
-    <script src="script.js"></script>
+    <script src="scriptv1.0.0.js"></script>
 </body>
 </html>
