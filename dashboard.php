@@ -193,6 +193,6 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
     </div>
 
     
-    <script src="script.js"></script>
+    <script src="script.js?v=<?php echo $version; ?>"></script>
 </body>
 </html>
