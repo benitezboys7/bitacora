@@ -1,4 +1,15 @@
 <?php
+// archivo.php
+
+session_start();
+
+if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true) {
+    header('HTTP/1.0 403 Forbidden');
+    echo "No tienes permiso para acceder a esta página.";
+    exit;
+}
+
+// Código backend
 include 'db.php';
 
 
