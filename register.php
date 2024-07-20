@@ -1,5 +1,8 @@
 <?php
 
+
+session_start(); // Inicia la sesión
+
 if (!isset($_SESSION['user_id'])) {
     // Redirige al inicio de sesión si no hay una sesión activa
     header("Location: index.php");
