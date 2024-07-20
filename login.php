@@ -22,10 +22,10 @@ $response = ["success" => false, "message" => "Usuario no encontrado"];
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    if ($password === $row['password']) { // Asegúrate de que el método de verificación de contraseña coincida con el almacenamiento
+    if (password_verify($password, $row['password'])) { // Usar password_verify para verificar la contraseña encriptada
         $_SESSION['user_id'] = $row['id'];
         $_SESSION['user_email'] = $row['email'];
-        $response = ["success" => true, "message" => "Login exitoso!", "redirect" => "dashboard.php"]; // Cambia 'dashboard.php' por la URL deseada
+        $response = ["success" => true, "message" => "Login exitoso!", "redirect" => "dashboard.php"];
     } else {
         $response = ["success" => false, "message" => "Contraseña incorrecta"];
     }
