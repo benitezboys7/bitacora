@@ -226,12 +226,18 @@ document.addEventListener("DOMContentLoaded", function() {
                                 const customerName = this.dataset.name;
                                 const customerEmail = this.dataset.email;
 
-                                document.getElementById("editCustomerId").value = customerId;
-                                document.getElementById("editName").value = customerName;
-                                document.getElementById("editEmail").value = customerEmail;
+                                const editCustomerId = document.getElementById("editCustomerId");
+                                const editName = document.getElementById("editName");
+                                const editEmail = document.getElementById("editEmail");
 
-                                if (editCustomerModal) {
-                                    editCustomerModal.style.display = "block";
+                                if (editCustomerId && editName && editEmail) {
+                                    editCustomerId.value = customerId;
+                                    editName.value = customerName;
+                                    editEmail.value = customerEmail;
+
+                                    if (editCustomerModal) {
+                                        editCustomerModal.style.display = "block";
+                                    }
                                 }
                             });
                         });
