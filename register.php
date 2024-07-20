@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($stmt->execute()) {
         $message = "Registro exitoso";
-        header("Location: login.php");
+        header("Location: dashboard.php");
         exit();
     } else {
         $message = "Error: " . $stmt->error;
