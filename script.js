@@ -1,113 +1,54 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // Función para mostrar mensajes
-    function showMessage(message, redirect = false) {
-        const messageContainer = document.getElementById("messageContainer");
-        if (messageContainer) {
-            messageContainer.textContent = message;
-            messageContainer.classList.remove("hidden");
-
-            setTimeout(() => {
-                messageContainer.classList.add("hidden");
-                if (redirect) {
-                    window.location.href = redirect;
-                }
-            }, 2000); // 2000 ms = 2 segundos
-        }
-    }
-
-    // Manejar el formulario de inicio de sesión
     const loginForm = document.getElementById("loginForm");
-    if (loginForm) {
-        loginForm.addEventListener("submit", function(event) {
-            event.preventDefault();
-            const email = document.getElementById("loginEmail").value;
-            const password = document.getElementById("loginPassword").value;
-
-            if (!validateEmail(email) || !validatePassword(password)) {
-                alert("Invalid email or password format");
-                return;
-            }
-
-            const formData = new FormData(loginForm);
-            fetch("login.php", {
-                method: "POST",
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                showMessage(data.message, data.success ? "dashboard.php" : false);
-            })
-            .catch(error => console.error('Error:', error));
-        });
-    }
-
-    // Manejar el formulario de registro
-    const registerForm = document.getElementById("registerForm");
-    if (registerForm) {
-        registerForm.addEventListener("submit", function(event) {
-            event.preventDefault();
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-
-            if (!validateEmail(email) || !validatePassword(password)) {
-                alert("Invalid email or password format");
-                return;
-            }
-
-            const formData = new FormData(registerForm);
-            fetch("register.php", {
-                method: "POST",
-                body: formData
-            })
-            .then(response => response.text())
-            .then(message => {
-                showMessage(message, "/index.php"); // Redirige a la página de inicio de sesión
-            })
-            .catch(error => console.error('Error:', error));
-        });
-    }
-
-    // Manejar el botón de cerrar sesión
     const logoutButton = document.getElementById("logoutButton");
-    if (logoutButton) {
-        logoutButton.addEventListener("click", function(event) {
-            event.preventDefault();
 
-            fetch("logout.php", {
-                method: "POST"
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showMessage("Logout exitoso!", "index.php"); // Redirige a la página de inicio
-                } else {
-                    console.error("Error en el logout: ", data.message);
+    function showMessage(message) {
+        const messageContainer = document.getElementById("messageContainer");
+        messageContainer.textContent = message;
+        messageContainer.classList.remove("hidden");
+
+        setTimeout(() => {
+            messageContainer.classList.add("hidden");
+            // En el caso de logout, redirige a la página deseada después de 1 segundo
+            window.location.href = "dashboard.php";
+        }, 1000); // 1000 ms = 1 segundos
+    }
+
+    if (window.location.pathname.endsWith("index.php") || window.location.pathname === "/") {
+        // Página de inicio de sesión
+        if (loginForm) {
+            loginForm.addEventListener("submit", function(event) {
+                event.preventDefault();
+                const email = document.getElementById("loginEmail").value;
+                const password = document.getElementById("loginPassword").value;
+
+                if (!validateEmail(email) || !validatePassword(password)) {
+                    alert("Invalid email or password format");
+                    return;
                 }
-            })
-            .catch(error => console.error('Error:', error));
-        });
-    }
 
-    // Mostrar modales
-    function showModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-            modal.style.display = "block";
+                const formData = new FormData(loginForm);
+                fetch("login.php", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    showMessage(data.message);
+                    if (data.success) {
+                        setTimeout(() => {
+                            window.location.href = "dashboard.php"; // Redirige a dashboard.php después de mostrar el mensaje
+                        }, 2000);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
         }
-    }
+    } else if (window.location.pathname.endsWith("dashboard.php")) {
+        // Página del Dashboard
+        const links = document.querySelectorAll("aside a.menu-link");
+        const contentSections = document.querySelectorAll(".content-section");
 
-    function hideModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-            modal.style.display = "none";
-        }
-    }
-
-    // Manejar el dashboard
-    const links = document.querySelectorAll("aside a.menu-link");
-    const contentSections = document.querySelectorAll(".content-section");
-
-    if (links.length > 0 && contentSections.length > 0) {
         links.forEach(link => {
             link.addEventListener("click", function(event) {
                 event.preventDefault();
@@ -121,16 +62,6 @@ document.addEventListener("DOMContentLoaded", function() {
                     section.style.display = section.id === target ? "block" : "none";
                 });
 
-                // Cargar contenido para "Add Product"
-                if (target === "add-product") {
-                    fetch("register.php")
-                    .then(response => response.text())
-                    .then(html => {
-                        document.getElementById("addProductContent").innerHTML = html;
-                    })
-                    .catch(error => console.error('Error loading register.php:', error));
-                }
-
                 history.pushState(null, '', 'dashboard.php?view=' + target);
             });
         });
@@ -140,36 +71,56 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById(defaultView).style.display = 'block';
         document.querySelector(`aside a.menu-link[data-target=${defaultView}]`).classList.add('active');
 
+        // Botón de cerrar sesión
+        if (logoutButton) {
+            logoutButton.addEventListener("click", function(event) {
+                event.preventDefault();
+
+                fetch("logout.php", {
+                    method: "POST"
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showMessage("Logout exitoso!"); // Muestra el mensaje de logout exitoso
+                    } else {
+                        console.error("Error en el logout: ", data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        }
+
         // Mostrar modal de añadir cliente
         const addCustomerBtn = document.getElementById("addCustomerBtn");
         const addCustomerModal = document.getElementById("addCustomerModal");
-        const closeAddModal = addCustomerModal ? addCustomerModal.querySelector(".close") : null;
+        const closeAddModal = addCustomerModal.querySelector(".close");
 
         if (addCustomerBtn) {
             addCustomerBtn.addEventListener("click", function(event) {
                 event.preventDefault();
-                showModal("addCustomerModal");
+                addCustomerModal.style.display = "block";
             });
         }
 
         if (closeAddModal) {
             closeAddModal.addEventListener("click", function() {
-                hideModal("addCustomerModal");
+                addCustomerModal.style.display = "none";
             });
         }
 
         // Mostrar modal de editar cliente
         const editCustomerModal = document.getElementById("editCustomerModal");
-        const closeEditModal = editCustomerModal ? editCustomerModal.querySelector(".close") : null;
+        const editCustomerForm = document.getElementById("editCustomerForm");
+        const closeEditModal = editCustomerModal.querySelector(".close");
 
         if (closeEditModal) {
             closeEditModal.addEventListener("click", function() {
-                hideModal("editCustomerModal");
+                editCustomerModal.style.display = "none";
             });
         }
 
         // Enviar datos del formulario de edición mediante AJAX
-        const editCustomerForm = document.getElementById("editCustomerForm");
         if (editCustomerForm) {
             editCustomerForm.addEventListener("submit", function(event) {
                 event.preventDefault();
@@ -184,7 +135,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 .then(data => {
                     if (data.success) {
                         alert("Customer updated successfully");
-                        hideModal("editCustomerModal");
+                        editCustomerModal.style.display = "none";
                         loadCustomers(); // Recargar la lista de clientes
                         window.location.href = 'dashboard.php?view=customers';
                     } else {
@@ -197,61 +148,50 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Cargar datos de clientes
         function loadCustomers() {
-            const customersSection = document.getElementById("customers");
-            if (customersSection) {
-                fetch("get_customers.php")
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const tbody = customersSection.querySelector("tbody");
-                    if (tbody) {
-                        tbody.innerHTML = ""; // Limpiar contenido previo
-                        data.customers.forEach(customer => {
-                            const tr = document.createElement("tr");
-                            tr.innerHTML = `
-                                <td>${customer.id}</td>
-                                <td>${customer.name}</td>
-                                <td>${customer.email}</td>
-                                <td>
-                                    <a href="#" class="edit-button" data-id="${customer.id}" data-name="${customer.name}" data-email="${customer.email}">Edit</a>
-                                    <a href="delete_customer.php?id=${customer.id}" class="delete-button">Delete</a>
-                                </td>
-                            `;
-                            tbody.appendChild(tr);
-                        });
-
-                        // Añadir evento a los nuevos botones de editar
-                        document.querySelectorAll(".edit-button").forEach(button => {
-                            button.addEventListener("click", function(event) {
-                                event.preventDefault();
-
-                                const customerId = this.dataset.id;
-                                const customerName = this.dataset.name;
-                                const customerEmail = this.dataset.email;
-
-                                const editCustomerId = document.getElementById("editCustomerId");
-                                const editName = document.getElementById("editName");
-                                const editEmail = document.getElementById("editEmail");
-
-                                if (editCustomerId && editName && editEmail) {
-                                    editCustomerId.value = customerId;
-                                    editName.value = customerName;
-                                    editEmail.value = customerEmail;
-
-                                    showModal("editCustomerModal");
-                                }
-                            });
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
+            fetch("get_customers.php")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const tbody = document.querySelector("#customers tbody");
+                tbody.innerHTML = ""; // Limpiar contenido previo
+                data.customers.forEach(customer => {
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td>${customer.id}</td>
+                        <td>${customer.name}</td>
+                        <td>${customer.email}</td>
+                        <td>
+                            <a href="#" class="edit-button" data-id="${customer.id}" data-name="${customer.name}" data-email="${customer.email}">Edit</a>
+                            <a href="delete_customer.php?id=${customer.id}" class="delete-button">Delete</a>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
                 });
-            }
+
+                // Añadir evento a los nuevos botones de editar
+                document.querySelectorAll(".edit-button").forEach(button => {
+                    button.addEventListener("click", function(event) {
+                        event.preventDefault();
+
+                        const customerId = this.dataset.id;
+                        const customerName = this.dataset.name;
+                        const customerEmail = this.dataset.email;
+
+                        document.getElementById("editCustomerId").value = customerId;
+                        document.getElementById("editName").value = customerName;
+                        document.getElementById("editEmail").value = customerEmail;
+
+                        editCustomerModal.style.display = "block";
+                    });
+                });
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
         }
 
         // Inicializar la carga de clientes al cargar la página
@@ -269,6 +209,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function validatePassword(password) {
+        // Aquí puedes agregar validaciones adicionales para la contraseña si lo deseas
         return password.length >= 6; // Ejemplo: longitud mínima de 6 caracteres
     }
 });
