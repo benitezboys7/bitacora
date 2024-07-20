@@ -1,8 +1,4 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const loginForm = document.getElementById("loginForm");
-    const registerForm = document.getElementById("registerForm");
-    const logoutButton = document.getElementById("logoutButton");
-
     // Función para mostrar mensajes
     function showMessage(message, redirect = false) {
         const messageContainer = document.getElementById("messageContainer");
@@ -20,6 +16,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Manejar el formulario de inicio de sesión
+    const loginForm = document.getElementById("loginForm");
     if (loginForm) {
         loginForm.addEventListener("submit", function(event) {
             event.preventDefault();
@@ -45,6 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Manejar el formulario de registro
+    const registerForm = document.getElementById("registerForm");
     if (registerForm) {
         registerForm.addEventListener("submit", function(event) {
             event.preventDefault();
@@ -70,6 +68,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Manejar el botón de cerrar sesión
+    const logoutButton = document.getElementById("logoutButton");
     if (logoutButton) {
         logoutButton.addEventListener("click", function(event) {
             event.preventDefault();
@@ -161,7 +160,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Mostrar modal de editar cliente
         const editCustomerModal = document.getElementById("editCustomerModal");
-        const editCustomerForm = document.getElementById("editCustomerForm");
         const closeEditModal = editCustomerModal ? editCustomerModal.querySelector(".close") : null;
 
         if (closeEditModal) {
@@ -171,6 +169,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         // Enviar datos del formulario de edición mediante AJAX
+        const editCustomerForm = document.getElementById("editCustomerForm");
         if (editCustomerForm) {
             editCustomerForm.addEventListener("submit", function(event) {
                 event.preventDefault();
