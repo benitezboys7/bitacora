@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const registerForm = document.getElementById("registerForm");
     const logoutButton = document.getElementById("logoutButton");
 
+    // Función para mostrar mensajes
     function showMessage(message, redirect = false) {
         const messageContainer = document.getElementById("messageContainer");
         if (messageContainer) {
@@ -88,6 +89,21 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
+    // Mostrar modales
+    function showModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.style.display = "block";
+        }
+    }
+
+    function hideModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.style.display = "none";
+        }
+    }
+
     // Manejar el dashboard
     const links = document.querySelectorAll("aside a.menu-link");
     const contentSections = document.querySelectorAll(".content-section");
@@ -133,17 +149,13 @@ document.addEventListener("DOMContentLoaded", function() {
         if (addCustomerBtn) {
             addCustomerBtn.addEventListener("click", function(event) {
                 event.preventDefault();
-                if (addCustomerModal) {
-                    addCustomerModal.style.display = "block";
-                }
+                showModal("addCustomerModal");
             });
         }
 
         if (closeAddModal) {
             closeAddModal.addEventListener("click", function() {
-                if (addCustomerModal) {
-                    addCustomerModal.style.display = "none";
-                }
+                hideModal("addCustomerModal");
             });
         }
 
@@ -154,9 +166,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (closeEditModal) {
             closeEditModal.addEventListener("click", function() {
-                if (editCustomerModal) {
-                    editCustomerModal.style.display = "none";
-                }
+                hideModal("editCustomerModal");
             });
         }
 
@@ -175,9 +185,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 .then(data => {
                     if (data.success) {
                         alert("Customer updated successfully");
-                        if (editCustomerModal) {
-                            editCustomerModal.style.display = "none";
-                        }
+                        hideModal("editCustomerModal");
                         loadCustomers(); // Recargar la lista de clientes
                         window.location.href = 'dashboard.php?view=customers';
                     } else {
@@ -235,9 +243,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                     editName.value = customerName;
                                     editEmail.value = customerEmail;
 
-                                    if (editCustomerModal) {
-                                        editCustomerModal.style.display = "block";
-                                    }
+                                    showModal("editCustomerModal");
                                 }
                             });
                         });
