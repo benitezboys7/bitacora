@@ -5,15 +5,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function showMessage(message, redirect = false) {
         const messageContainer = document.getElementById("messageContainer");
-        messageContainer.textContent = message;
-        messageContainer.classList.remove("hidden");
+        if (messageContainer) {
+            messageContainer.textContent = message;
+            messageContainer.classList.remove("hidden");
 
-        setTimeout(() => {
-            messageContainer.classList.add("hidden");
-            if (redirect) {
-                window.location.href = redirect;
-            }
-        }, 2000); // 2000 ms = 2 segundos
+            setTimeout(() => {
+                messageContainer.classList.add("hidden");
+                if (redirect) {
+                    window.location.href = redirect;
+                }
+            }, 2000); // 2000 ms = 2 segundos
+        }
     }
 
     // Manejar el formulario de inicio de sesión
@@ -87,10 +89,10 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Manejar el dashboard
-    if (window.location.pathname.endsWith("dashboard.php")) {
-        const links = document.querySelectorAll("aside a.menu-link");
-        const contentSections = document.querySelectorAll(".content-section");
+    const links = document.querySelectorAll("aside a.menu-link");
+    const contentSections = document.querySelectorAll(".content-section");
 
+    if (links.length > 0 && contentSections.length > 0) {
         links.forEach(link => {
             link.addEventListener("click", function(event) {
                 event.preventDefault();
@@ -126,29 +128,35 @@ document.addEventListener("DOMContentLoaded", function() {
         // Mostrar modal de añadir cliente
         const addCustomerBtn = document.getElementById("addCustomerBtn");
         const addCustomerModal = document.getElementById("addCustomerModal");
-        const closeAddModal = addCustomerModal.querySelector(".close");
+        const closeAddModal = addCustomerModal ? addCustomerModal.querySelector(".close") : null;
 
         if (addCustomerBtn) {
             addCustomerBtn.addEventListener("click", function(event) {
                 event.preventDefault();
-                addCustomerModal.style.display = "block";
+                if (addCustomerModal) {
+                    addCustomerModal.style.display = "block";
+                }
             });
         }
 
         if (closeAddModal) {
             closeAddModal.addEventListener("click", function() {
-                addCustomerModal.style.display = "none";
+                if (addCustomerModal) {
+                    addCustomerModal.style.display = "none";
+                }
             });
         }
 
         // Mostrar modal de editar cliente
         const editCustomerModal = document.getElementById("editCustomerModal");
         const editCustomerForm = document.getElementById("editCustomerForm");
-        const closeEditModal = editCustomerModal.querySelector(".close");
+        const closeEditModal = editCustomerModal ? editCustomerModal.querySelector(".close") : null;
 
         if (closeEditModal) {
             closeEditModal.addEventListener("click", function() {
-                editCustomerModal.style.display = "none";
+                if (editCustomerModal) {
+                    editCustomerModal.style.display = "none";
+                }
             });
         }
 
@@ -167,7 +175,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 .then(data => {
                     if (data.success) {
                         alert("Customer updated successfully");
-                        editCustomerModal.style.display = "none";
+                        if (editCustomerModal) {
+                            editCustomerModal.style.display = "none";
+                        }
                         loadCustomers(); // Recargar la lista de clientes
                         window.location.href = 'dashboard.php?view=customers';
                     } else {
@@ -180,50 +190,57 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Cargar datos de clientes
         function loadCustomers() {
-            fetch("get_customers.php")
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                const tbody = document.querySelector("#customers tbody");
-                tbody.innerHTML = ""; // Limpiar contenido previo
-                data.customers.forEach(customer => {
-                    const tr = document.createElement("tr");
-                    tr.innerHTML = `
-                        <td>${customer.id}</td>
-                        <td>${customer.name}</td>
-                        <td>${customer.email}</td>
-                        <td>
-                            <a href="#" class="edit-button" data-id="${customer.id}" data-name="${customer.name}" data-email="${customer.email}">Edit</a>
-                            <a href="delete_customer.php?id=${customer.id}" class="delete-button">Delete</a>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
+            const customersSection = document.getElementById("customers");
+            if (customersSection) {
+                fetch("get_customers.php")
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const tbody = customersSection.querySelector("tbody");
+                    if (tbody) {
+                        tbody.innerHTML = ""; // Limpiar contenido previo
+                        data.customers.forEach(customer => {
+                            const tr = document.createElement("tr");
+                            tr.innerHTML = `
+                                <td>${customer.id}</td>
+                                <td>${customer.name}</td>
+                                <td>${customer.email}</td>
+                                <td>
+                                    <a href="#" class="edit-button" data-id="${customer.id}" data-name="${customer.name}" data-email="${customer.email}">Edit</a>
+                                    <a href="delete_customer.php?id=${customer.id}" class="delete-button">Delete</a>
+                                </td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+
+                        // Añadir evento a los nuevos botones de editar
+                        document.querySelectorAll(".edit-button").forEach(button => {
+                            button.addEventListener("click", function(event) {
+                                event.preventDefault();
+
+                                const customerId = this.dataset.id;
+                                const customerName = this.dataset.name;
+                                const customerEmail = this.dataset.email;
+
+                                document.getElementById("editCustomerId").value = customerId;
+                                document.getElementById("editName").value = customerName;
+                                document.getElementById("editEmail").value = customerEmail;
+
+                                if (editCustomerModal) {
+                                    editCustomerModal.style.display = "block";
+                                }
+                            });
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
                 });
-
-                // Añadir evento a los nuevos botones de editar
-                document.querySelectorAll(".edit-button").forEach(button => {
-                    button.addEventListener("click", function(event) {
-                        event.preventDefault();
-
-                        const customerId = this.dataset.id;
-                        const customerName = this.dataset.name;
-                        const customerEmail = this.dataset.email;
-
-                        document.getElementById("editCustomerId").value = customerId;
-                        document.getElementById("editName").value = customerName;
-                        document.getElementById("editEmail").value = customerEmail;
-
-                        editCustomerModal.style.display = "block";
-                    });
-                });
-            })
-            .catch(error => {
-                console.error('There was a problem with the fetch operation:', error);
-            });
+            }
         }
 
         // Inicializar la carga de clientes al cargar la página
