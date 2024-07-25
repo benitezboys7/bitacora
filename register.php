@@ -1,166 +1,71 @@
-document.addEventListener("DOMContentLoaded", function() {
-    // Mostrar modales
-    function showModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-            modal.style.display = "block";
-        }
+<?php
+
+
+session_start(); // Inicia la sesión
+
+if (!isset($_SESSION['user_id'])) {
+    // Redirige al inicio de sesión si no hay una sesión activa
+    header("Location: index.php");
+    exit();
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    include 'db.php';
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    if ($conn->connect_error) {
+        die("Conexión fallida: " . $conn->connect_error);
     }
 
-    function hideModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-            modal.style.display = "none";
-        }
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // Encriptar la contraseña
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+    // Insertar el usuario en la base de datos
+    $sql = "INSERT INTO users (email, password) VALUES (?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $email, $hashed_password);
+
+    if ($stmt->execute()) {
+        $message = "Registro exitoso";
+        header("Location: dashboard.php");
+        exit();
+    } else {
+        $message = "Error: " . $stmt->error;
     }
 
-    // Manejar el dashboard
-    const links = document.querySelectorAll("aside a.menu-link");
-    const contentSections = document.querySelectorAll(".content-section");
+    $stmt->close();
+    $conn->close();
+}
+?>
 
-    if (links.length > 0 && contentSections.length > 0) {
-        links.forEach(link => {
-            link.addEventListener("click", function(event) {
-                event.preventDefault();
-
-                links.forEach(link => link.classList.remove("active"));
-                this.classList.add("active");
-
-                const target = this.getAttribute("data-target");
-
-                contentSections.forEach(section => {
-                    section.style.display = section.id === target ? "block" : "none";
-                });
-
-                history.pushState(null, '', 'dashboard.php?view=' + target);
-            });
-        });
-
-        // Mostrar la sección predeterminada o la sección indicada en el parámetro 'view'
-        const defaultView = getParameterByName('view') || 'dashboard';
-        document.getElementById(defaultView).style.display = 'block';
-        document.querySelector(`aside a.menu-link[data-target=${defaultView}]`).classList.add('active');
-
-        // Mostrar modal de añadir cliente
-        const addCustomerBtn = document.getElementById("addCustomerBtn");
-        const addCustomerModal = document.getElementById("addCustomerModal");
-        const closeAddModal = addCustomerModal ? addCustomerModal.querySelector(".close") : null;
-
-        if (addCustomerBtn) {
-            addCustomerBtn.addEventListener("click", function(event) {
-                event.preventDefault();
-                showModal("addCustomerModal");
-            });
-        }
-
-        if (closeAddModal) {
-            closeAddModal.addEventListener("click", function() {
-                hideModal("addCustomerModal");
-            });
-        }
-
-        // Mostrar modal de editar cliente
-        const editCustomerModal = document.getElementById("editCustomerModal");
-        const closeEditModal = editCustomerModal ? editCustomerModal.querySelector(".close") : null;
-
-        if (closeEditModal) {
-            closeEditModal.addEventListener("click", function() {
-                hideModal("editCustomerModal");
-            });
-        }
-
-        // Enviar datos del formulario de edición mediante AJAX
-        const editCustomerForm = document.getElementById("editCustomerForm");
-        if (editCustomerForm) {
-            editCustomerForm.addEventListener("submit", function(event) {
-                event.preventDefault();
-
-                const formData = new FormData(editCustomerForm);
-
-                fetch("edit_customer.php", {
-                    method: "POST",
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("Customer updated successfully");
-                        hideModal("editCustomerModal");
-                        loadCustomers(); // Recargar la lista de clientes
-                        window.location.href = 'dashboard.php?view=customers';
-                    } else {
-                        alert("Error updating customer: " + data.message);
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            });
-        }
-
-        // Cargar datos de clientes
-        function loadCustomers() {
-            const customersSection = document.getElementById("customers");
-            if (customersSection) {
-                fetch("get_customers.php")
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const tbody = customersSection.querySelector("tbody");
-                    if (tbody) {
-                        tbody.innerHTML = ""; // Limpiar contenido previo
-                        data.customers.forEach(customer => {
-                            const tr = document.createElement("tr");
-                            tr.innerHTML = `
-                                <td>${customer.id}</td>
-                                <td>${customer.name}</td>
-                                <td>${customer.email_proveedor}</td>
-                                <td>
-                                    <a href="#" class="edit-button" data-id="${customer.id}" data-name="${customer.name}" data-email-proveedor="${customer.email_proveedor}">Edit</a>
-                                    <a href="delete_customer.php?id=${customer.id}" class="delete-button">Delete</a>
-                                </td>
-                            `;
-                            tbody.appendChild(tr);
-                        });
-
-                        // Añadir evento a los nuevos botones de editar
-                        document.querySelectorAll(".edit-button").forEach(button => {
-                            button.addEventListener("click", function(event) {
-                                event.preventDefault();
-
-                                const customerId = this.dataset.id;
-                                const customerName = this.dataset.name;
-                                const customerEmailProveedor = this.dataset.emailProveedor;
-                                
-                                const editCustomerId = document.getElementById("editCustomerId");
-                                const editName = document.getElementById("editName");
-                                const editEmailProveedor = document.getElementById("editEmailProveedor");
-
-                                if (editCustomerId && editName && editEmailProveedor) {
-                                    editCustomerId.value = customerId;
-                                    editName.value = customerName;
-                                    editEmailProveedor.value = customerEmailProveedor;
-
-                                    showModal("editCustomerModal");
-                                }
-                            });
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
-                });
-            }
-        }
-
-        // Inicializar la carga de clientes al cargar la página
-        loadCustomers();
-    }
-
-    function getParameterByName(name) {
-        const url = new URL(window.location.href);
-        return url.searchParams.get(name);
-    }
-});
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Asegúrate de tener un archivo CSS para estilizar tu formulario -->
+</head>
+<body>
+    <div class="container">
+        <h2>Registro de Usuario</h2>
+        <?php if (!empty($message)): ?>
+            <p><?php echo $message; ?></p>
+        <?php endif; ?>
+        <form action="register.php" method="post" id="registerForm">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required>
+            
+            <button type="submit">Registrar</button>
+        </form>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>

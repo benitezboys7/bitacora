@@ -215,9 +215,9 @@ document.addEventListener("DOMContentLoaded", function() {
                             tr.innerHTML = `
                                 <td>${customer.id}</td>
                                 <td>${customer.name}</td>
-                                <td>${customer.email}</td>
+                                <td>${customer.email_proveedor}</td>
                                 <td>
-                                    <a href="#" class="edit-button" data-id="${customer.id}" data-name="${customer.name}" data-email="${customer.email}">Edit</a>
+                                    <a href="#" class="edit-button" data-id="${customer.id}" data-name="${customer.name}" data-email-proveedor="${customer.email_proveedor}">Edit</a>
                                     <a href="delete_customer.php?id=${customer.id}" class="delete-button">Delete</a>
                                 </td>
                             `;
@@ -229,20 +229,20 @@ document.addEventListener("DOMContentLoaded", function() {
                             button.addEventListener("click", function(event) {
                                 event.preventDefault();
 
-                                const customerId = this.dataset.id;
-                                const customerName = this.dataset.name;
-                                const customerEmail = this.dataset.email;
+                            const customerId = this.dataset.id;
+                            const customerName = this.dataset.name;
+                            const customerEmailProveedor = this.dataset.emailProveedor;
 
-                                const editCustomerId = document.getElementById("editCustomerId");
-                                const editName = document.getElementById("editName");
-                                const editEmail = document.getElementById("editEmail");
+                            const editCustomerId = document.getElementById("editCustomerId");
+                            const editName = document.getElementById("editName");
+                            const editEmailProveedor = document.getElementById("editEmail_proveedor");
 
-                                if (editCustomerId && editName && editEmail) {
-                                    editCustomerId.value = customerId;
-                                    editName.value = customerName;
-                                    editEmail.value = customerEmail;
+                            if (editCustomerId && editName && editEmailProveedor) {
+                                editCustomerId.value = customerId;
+                                editName.value = customerName;
+                                editEmailProveedor.value = customerEmailProveedor;
 
-                                    showModal("editCustomerModal");
+                                showModal("editCustomerModal");
                                 }
                             });
                         });
