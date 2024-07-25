@@ -54,8 +54,8 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
             <input type="hidden" id="editCustomerId" name="id">
             <label for="editName">Name:</label>
             <input type="text" id="editName" name="name" required>
-            <label for="editemail_proveedor">Email:</label>
-            <input type="email" id="editemail_proveedor" name="email_proveedor" required>
+            <label for="editEmail_proveedor">Email:</label>
+            <input type="email" id="editEmail_proveedor" name="email" required>
             <button type="submit">Update Customer</button>
         </form>
     </div>
@@ -142,7 +142,7 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>email_proveedor</th>
+                            <th>Email</th>
                             <th>Actions</th>
                         </tr>
                     </thead>

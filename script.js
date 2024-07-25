@@ -235,12 +235,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
                                 const editCustomerId = document.getElementById("editCustomerId");
                                 const editName = document.getElementById("editName");
-                                const editemail_proveedor = document.getElementById("editemail_proveedor");
+                                const editEmail_proveedor = document.getElementById("editEmail_proveedor");
 
-                                if (editCustomerId && editName && email_proveedor) {
+                                if (editCustomerId && editName && editEmail_proveedor) {
                                     editCustomerId.value = customerId;
                                     editName.value = customerName;
-                                    editemail_proveedor.value = customerEmail;
+                                    editEmail_proveedor.value = customerEmail;
 
                                     showModal("editCustomerModal");
                                 }
