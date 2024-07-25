@@ -55,7 +55,7 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
             <label for="editName">Name:</label>
             <input type="text" id="editName" name="name" required>
             <label for="editEmail_proveedor">Email:</label>
-            <input type="email" id="editEmail_proveedor" name="email_proveedor" required>
+            <input type="email" id="editEmail_proveedor" name="editEmail_proveedor" required>
             <button type="submit">Actualizar proveedor</button>
         </form>
     </div>
