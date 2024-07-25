@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <td>${customer.name}</td>
                                 <td>${customer.email_proveedor}</td>
                                 <td>
-                                    <a href="#" class="edit-button" data-id="${customer.id}" data-name="${customer.name}" data-email="${customer.email_proveedor}">Edit</a>
+                                    <a href="#" class="edit-button" data-id="${customer.id}" data-name="${customer.name}" data-email-proveedor="${customer.email_proveedor}">Edit</a>
                                     <a href="delete_customer.php?id=${customer.id}" class="delete-button">Delete</a>
                                 </td>
                             `;
