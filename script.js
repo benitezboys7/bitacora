@@ -215,7 +215,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             tr.innerHTML = `
                                 <td>${customer.id}</td>
                                 <td>${customer.name}</td>
-                                <td>${customer.email}</td>
+                                <td>${customer.email_proveedor}</td>
                                 <td>
                                     <a href="#" class="edit-button" data-id="${customer.id}" data-name="${customer.name}" data-email="${customer.email}">Edit</a>
                                     <a href="delete_customer.php?id=${customer.id}" class="delete-button">Delete</a>
@@ -231,16 +231,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
                                 const customerId = this.dataset.id;
                                 const customerName = this.dataset.name;
-                                const customerEmail = this.dataset.email;
+                                const customerEmail = this.dataset.email_proveedor;
 
                                 const editCustomerId = document.getElementById("editCustomerId");
                                 const editName = document.getElementById("editName");
-                                const editEmail = document.getElementById("editEmail");
+                                const email_proveedor = document.getElementById("email_proveedor_proveedor");
 
-                                if (editCustomerId && editName && editEmail) {
+                                if (editCustomerId && editName && email_proveedor) {
                                     editCustomerId.value = customerId;
                                     editName.value = customerName;
-                                    editEmail.value = customerEmail;
+                                    email_proveedor.value = customerEmail;
 
                                     showModal("editCustomerModal");
                                 }

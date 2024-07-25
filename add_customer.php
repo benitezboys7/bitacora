@@ -15,11 +15,11 @@ include 'db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
-    $email = $_POST['email'];
+    $email_proveedor = $_POST['email_proveedor'];
 
     // Prepara la consulta para evitar inyecciones SQL
-    $stmt = $conn->prepare("INSERT INTO customers (name, email) VALUES (?, ?)");
-    $stmt->bind_param("ss", $name, $email);
+    $stmt = $conn->prepare("INSERT INTO customers (name, email_proveedor) VALUES (?, ?)");
+    $stmt->bind_param("ss", $name, $email_proveedor);
 
     if ($stmt->execute()) {
         // Redirige a la vista de clientes en el dashboard después de agregar el cliente
@@ -38,6 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 <form method="post" action="">
     Name: <input type="text" name="name" required><br>
-    Email: <input type="email" name="email" required><br>
+    Email: <input type="email" name="email_proveedor" required><br>
     <input type="submit" value="Add Customer">
 </form>

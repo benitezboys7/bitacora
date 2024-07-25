@@ -34,13 +34,13 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
 <div id="addCustomerModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
-        <h2>Add New Customer</h2>
+        <h2>Agregar nuevo proveedor</h2>
         <form id="addCustomerForm" method="post" action="add_customer.php">
-            <label for="name">Name:</label>
+            <label for="name">Nombre:</label>
             <input type="text" id="name" name="name" required>
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-            <button type="submit">Add Customer</button>
+            <input type="email" id="email_proveedor" name="email_proveedor" required>
+            <button type="submit">Agregar nuevo</button>
         </form>
     </div>
 </div>
@@ -54,8 +54,8 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
             <input type="hidden" id="editCustomerId" name="id">
             <label for="editName">Name:</label>
             <input type="text" id="editName" name="name" required>
-            <label for="editEmail">Email:</label>
-            <input type="email" id="editEmail" name="email" required>
+            <label for="editemail_proveedor">Email:</label>
+            <input type="email" id="editemail_proveedor" name="email_proveedor" required>
             <button type="submit">Update Customer</button>
         </form>
     </div>
@@ -142,7 +142,7 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>Email</th>
+                            <th>email_proveedor</th>
                             <th>Actions</th>
                         </tr>
                     </thead>

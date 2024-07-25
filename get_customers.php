@@ -10,7 +10,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 include 'db.php';
 
-$sql = "SELECT id, name, email FROM customers";
+$sql = "SELECT id, name, email_proveedor FROM customers";
 $result = $conn->query($sql);
 
 $customers = array();

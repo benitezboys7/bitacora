@@ -16,9 +16,9 @@ $response = array('success' => false, 'message' => '');
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = $_POST['id'];
     $name = $_POST['name'];
-    $email = $_POST['email'];
+    $email_proveedor = $_POST['email_proveedor'];
 
-    $sql = "UPDATE customers SET name='$name', email='$email' WHERE id=$id";
+    $sql = "UPDATE customers SET name='$name', email_proveedor='$email_proveedor' WHERE id=$id";
 
     if ($conn->query($sql) === TRUE) {
         $response['success'] = true;
