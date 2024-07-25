@@ -1,3 +1,23 @@
+<?php
+session_start(); // Inicia la sesión
+
+// Verifica si el usuario ha iniciado sesión
+if (!isset($_SESSION['user_id'])) {
+    // Redirige al inicio de sesión si no hay una sesión activa
+    header("Location: index.php");
+    exit();
+}
+
+$inactive = 1800; // Tiempo en segundos (30 minutos)
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $inactive) {
+    // Última actividad fue hace más de 30 minutos
+    session_unset(); // Elimina todas las variables de sesión
+    session_destroy(); // Destruye la sesión
+    header("Location: index.php"); // Redirige al usuario al inicio de sesión
+    exit();
+}
+$_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última actividad
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
