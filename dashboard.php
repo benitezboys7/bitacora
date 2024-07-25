@@ -81,8 +81,8 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
                     <h3>Dashboard</h3> 
                 </a>
                 <a href="#" class="menu-link" data-target="customers">
-                    <span class="material-symbols-outlined">person</span>
-                    <h3>Customers</h3> 
+                <span class="material-symbols-outlined">badge</span>
+                    <h3>Mantenimientos</h3> 
                 </a>
                 <a href="#" class="menu-link" data-target="analytics">
                     <span class="material-symbols-outlined">insights</span>
@@ -106,8 +106,8 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
                     <h3>Settings</h3> 
                 </a>
                 <a href="#" class="menu-link" data-target="add-product">
-                    <span class="material-symbols-outlined">add</span>
-                    <h3>Add Product</h3> 
+                <span class="material-symbols-outlined">person_add</span>
+                    <h3>Agregar Usuarios</h3> 
                 </a>
                 <a href="#" id="logoutButton" class="menu-link">
                     <span class="material-symbols-outlined">logout</span>
