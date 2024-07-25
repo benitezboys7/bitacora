@@ -231,7 +231,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                                 const customerId = this.dataset.id;
                                 const customerName = this.dataset.name;
-                                const customerEmail = this.dataset.email_proveedor;
+                                const customerEmailProveedor = this.dataset.emailProveedor;
                                 
                                 const editCustomerId = document.getElementById("editCustomerId");
                                 const editName = document.getElementById("editName");
@@ -240,7 +240,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 if (editCustomerId && editName && editEmail_proveedor) {
                                     editCustomerId.value = customerId;
                                     editName.value = customerName;
-                                    editEmail_proveedor.value = customerEmail;
+                                    editEmail_proveedor.value = customerEmailProveedor;
 
                                     showModal("editCustomerModal");
                                 }
