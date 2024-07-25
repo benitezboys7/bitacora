@@ -34,13 +34,13 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
 <div id="addCustomerModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
-        <h2>Agregar nuevo proveedor</h2>
+        <h2>Add New Customer</h2>
         <form id="addCustomerForm" method="post" action="add_customer.php">
-            <label for="name">Nombre:</label>
+            <label for="name">Name:</label>
             <input type="text" id="name" name="name" required>
-            <label for="email_proveedor">Email:</label>
-            <input type="email" id="email_proveedor" name="email_proveedor" required>
-            <button type="submit">Agregar nuevo</button>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <button type="submit">Add Customer</button>
         </form>
     </div>
 </div>
@@ -49,17 +49,18 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
 <div id="editCustomerModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
-        <h2>Editar Proveedor</h2>
+        <h2>Edit Customer</h2>
         <form id="editCustomerForm" method="post" action="edit_customer.php">
             <input type="hidden" id="editCustomerId" name="id">
             <label for="editName">Name:</label>
             <input type="text" id="editName" name="name" required>
-            <label for="editEmail_proveedor">Email:</label>
-            <input type="email" id="editEmail_proveedor" name="email_proveedor" required>
-            <button type="submit">Actualizar proveedor</button>
+            <label for="editEmail">Email:</label>
+            <input type="email" id="editEmail" name="email" required>
+            <button type="submit">Update Customer</button>
         </form>
     </div>
 </div>
+
 <body>
     <div class="container">
         <!-- aside section start-->
@@ -80,8 +81,8 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
                     <h3>Dashboard</h3> 
                 </a>
                 <a href="#" class="menu-link" data-target="customers">
-                <span class="material-symbols-outlined">badge</span>
-                    <h3>Mantenimientos</h3> 
+                    <span class="material-symbols-outlined">person</span>
+                    <h3>Customers</h3> 
                 </a>
                 <a href="#" class="menu-link" data-target="analytics">
                     <span class="material-symbols-outlined">insights</span>
@@ -105,8 +106,8 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
                     <h3>Settings</h3> 
                 </a>
                 <a href="#" class="menu-link" data-target="add-product">
-                <span class="material-symbols-outlined">person_add</span>
-                    <h3>Agregar Usuarios</h3> 
+                    <span class="material-symbols-outlined">add</span>
+                    <h3>Add Product</h3> 
                 </a>
                 <a href="#" id="logoutButton" class="menu-link">
                     <span class="material-symbols-outlined">logout</span>

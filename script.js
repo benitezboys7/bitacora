@@ -229,20 +229,20 @@ document.addEventListener("DOMContentLoaded", function() {
                             button.addEventListener("click", function(event) {
                                 event.preventDefault();
 
-                            const customerId = this.dataset.id;
-                            const customerName = this.dataset.name;
-                            const customerEmailProveedor = this.dataset.emailProveedor;
+                                const customerId = this.dataset.id;
+                                const customerName = this.dataset.name;
+                                const customerEmail = this.dataset.email;
 
-                            const editCustomerId = document.getElementById("editCustomerId");
-                            const editName = document.getElementById("editName");
-                            const editEmailProveedor = document.getElementById("editEmail_proveedor");
+                                const editCustomerId = document.getElementById("editCustomerId");
+                                const editName = document.getElementById("editName");
+                                const editEmail = document.getElementById("editEmail");
 
-                            if (editCustomerId && editName && editEmailProveedor) {
-                                editCustomerId.value = customerId;
-                                editName.value = customerName;
-                                editEmailProveedor.value = customerEmailProveedor;
+                                if (editCustomerId && editName && editEmail) {
+                                    editCustomerId.value = customerId;
+                                    editName.value = customerName;
+                                    editEmail.value = customerEmail;
 
-                                showModal("editCustomerModal");
+                                    showModal("editCustomerModal");
                                 }
                             });
                         });
