@@ -231,7 +231,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                                 const customerId = this.dataset.id;
                                 const customerName = this.dataset.name;
-                                const customerEmail = this.dataset.editEmail_proveedor;
+                                const customerEmail = this.dataset.email_proveedor;
                                 console.log(customerEmail);
                                 const editCustomerId = document.getElementById("editCustomerId");
                                 const editName = document.getElementById("editName");
