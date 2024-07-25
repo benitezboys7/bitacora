@@ -28,247 +28,239 @@ document.addEventListener("DOMContentLoaded", function() {
                 return;
             }
 
-            const formData = new FormData(loginForm);
-            fetch("login.php", {
-                method: "POST",
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                showMessage(data.message, data.success ? "dashboard.php" : false);
-            })
-            .catch(error => console.error('Error:', error));
-        });
-    }
-
-    // Manejar el formulario de registro
-    const registerForm = document.getElementById("registerForm");
-    if (registerForm) {
-        registerForm.addEventListener("submit", function(event) {
-            event.preventDefault();
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-
-            if (!validateEmail(email) || !validatePassword(password)) {
-                alert("Invalid email or password format");
-                return;
-            }
-
-            const formData = new FormData(registerForm);
-            fetch("register.php", {
-                method: "POST",
-                body: formData
-            })
-            .then(response => response.text())
-            .then(message => {
-                showMessage(message, "/index.php"); // Redirige a la página de inicio de sesión
-            })
-            .catch(error => console.error('Error:', error));
-        });
-    }
-
-    // Manejar el botón de cerrar sesión
-    const logoutButton = document.getElementById("logoutButton");
-    if (logoutButton) {
-        logoutButton.addEventListener("click", function(event) {
-            event.preventDefault();
-
-            fetch("logout.php", {
-                method: "POST"
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showMessage("Logout exitoso!", "index.php"); // Redirige a la página de inicio
-                } else {
-                    console.error("Error en el logout: ", data.message);
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "login.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        showMessage(response.message, "dashboard.php");
+                    } else {
+                        showMessage(response.message);
+                    }
                 }
-            })
-            .catch(error => console.error('Error:', error));
+            };
+            xhr.send(`email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
         });
     }
 
-    // Mostrar modales
-    function showModal(modalId) {
+    // Validar email
+    function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+
+    // Validar password
+    function validatePassword(password) {
+        return password.length >= 6; // Ejemplo: contraseña debe tener al menos 6 caracteres
+    }
+
+    // Función para abrir el modal
+    function openModal(modalId) {
         const modal = document.getElementById(modalId);
         if (modal) {
             modal.style.display = "block";
         }
     }
 
-    function hideModal(modalId) {
+    // Función para cerrar el modal
+    function closeModal(modalId) {
         const modal = document.getElementById(modalId);
         if (modal) {
             modal.style.display = "none";
         }
     }
 
-    // Manejar el dashboard
-    const links = document.querySelectorAll("aside a.menu-link");
-    const contentSections = document.querySelectorAll(".content-section");
+    // Abrir el modal de agregar cliente
+    const addCustomerBtn = document.getElementById("addCustomerBtn");
+    if (addCustomerBtn) {
+        addCustomerBtn.addEventListener("click", function(event) {
+            event.preventDefault();
+            openModal("addCustomerModal");
+        });
+    }
 
-    if (links.length > 0 && contentSections.length > 0) {
-        links.forEach(link => {
-            link.addEventListener("click", function(event) {
-                event.preventDefault();
+    // Manejar el cierre del modal
+    const closeButtons = document.querySelectorAll(".close");
+    closeButtons.forEach(function(button) {
+        button.addEventListener("click", function() {
+            const modal = button.closest(".modal");
+            if (modal) {
+                modal.style.display = "none";
+            }
+        });
+    });
 
-                links.forEach(link => link.classList.remove("active"));
-                this.classList.add("active");
+    // Cargar clientes desde el servidor
+    function loadCustomers() {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "get_customers.php", true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                const customers = JSON.parse(xhr.responseText);
+                const tbody = document.querySelector("#customers tbody");
+                tbody.innerHTML = ""; // Limpiar tabla existente
 
-                const target = this.getAttribute("data-target");
-
-                contentSections.forEach(section => {
-                    section.style.display = section.id === target ? "block" : "none";
+                customers.forEach(function(customer) {
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td>${customer.id}</td>
+                        <td>${customer.name}</td>
+                        <td>${customer.email}</td>
+                        <td>
+                            <a href="#" class="edit-button" data-id="${customer.id}" data-name="${customer.name}" data-email="${customer.email}">Editar</a>
+                            <a href="#" class="delete-button" data-id="${customer.id}">Eliminar</a>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
                 });
 
-                // Cargar contenido para "Add Product"
-                if (target === "add-product") {
-                    fetch("register.php")
-                    .then(response => response.text())
-                    .then(html => {
-                        document.getElementById("addProductContent").innerHTML = html;
-                    })
-                    .catch(error => console.error('Error loading register.php:', error));
-                }
+                // Agregar eventos para los botones de editar
+                const editButtons = document.querySelectorAll(".edit-button");
+                editButtons.forEach(function(button) {
+                    button.addEventListener("click", function(event) {
+                        event.preventDefault();
+                        const customerId = button.getAttribute("data-id");
+                        const customerName = button.getAttribute("data-name");
+                        const customerEmail = button.getAttribute("data-email");
+                        openEditModal(customerId, customerName, customerEmail);
+                    });
+                });
 
-                history.pushState(null, '', 'dashboard.php?view=' + target);
-            });
-        });
-
-        // Mostrar la sección predeterminada o la sección indicada en el parámetro 'view'
-        const defaultView = getParameterByName('view') || 'dashboard';
-        document.getElementById(defaultView).style.display = 'block';
-        document.querySelector(`aside a.menu-link[data-target=${defaultView}]`).classList.add('active');
-
-        // Mostrar modal de añadir cliente
-        const addCustomerBtn = document.getElementById("addCustomerBtn");
-        const addCustomerModal = document.getElementById("addCustomerModal");
-        const closeAddModal = addCustomerModal ? addCustomerModal.querySelector(".close") : null;
-
-        if (addCustomerBtn) {
-            addCustomerBtn.addEventListener("click", function(event) {
-                event.preventDefault();
-                showModal("addCustomerModal");
-            });
-        }
-
-        if (closeAddModal) {
-            closeAddModal.addEventListener("click", function() {
-                hideModal("addCustomerModal");
-            });
-        }
-
-        // Mostrar modal de editar cliente
-        const editCustomerModal = document.getElementById("editCustomerModal");
-        const closeEditModal = editCustomerModal ? editCustomerModal.querySelector(".close") : null;
-
-        if (closeEditModal) {
-            closeEditModal.addEventListener("click", function() {
-                hideModal("editCustomerModal");
-            });
-        }
-
-        // Enviar datos del formulario de edición mediante AJAX
-        const editCustomerForm = document.getElementById("editCustomerForm");
-        if (editCustomerForm) {
-            editCustomerForm.addEventListener("submit", function(event) {
-                event.preventDefault();
-
-                const formData = new FormData(editCustomerForm);
-
-                fetch("edit_customer.php", {
-                    method: "POST",
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("Customer updated successfully");
-                        hideModal("editCustomerModal");
-                        loadCustomers(); // Recargar la lista de clientes
-                        window.location.href = 'dashboard.php?view=customers';
-                    } else {
-                        alert("Error updating customer: " + data.message);
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            });
-        }
-
-        // Cargar datos de clientes
-        function loadCustomers() {
-            const customersSection = document.getElementById("customers");
-            if (customersSection) {
-                fetch("get_customers.php")
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const tbody = customersSection.querySelector("tbody");
-                    if (tbody) {
-                        tbody.innerHTML = ""; // Limpiar contenido previo
-                        data.customers.forEach(customer => {
-                            const tr = document.createElement("tr");
-                            tr.innerHTML = `
-                                <td>${customer.id}</td>
-                                <td>${customer.name}</td>
-                                <td>${customer.email_proveedor}</td>
-                                <td>
-                                    <a href="#" class="edit-button" data-id="${customer.id}" data-name="${customer.name}" data-email-proveedor="${customer.email_proveedor}">Edit</a>
-                                    <a href="delete_customer.php?id=${customer.id}" class="delete-button">Delete</a>
-                                </td>
-                            `;
-                            tbody.appendChild(tr);
-                        });
-
-                        // Añadir evento a los nuevos botones de editar
-                        document.querySelectorAll(".edit-button").forEach(button => {
-                            button.addEventListener("click", function(event) {
-                                event.preventDefault();
-
-                                const customerId = this.dataset.id;
-                                const customerName = this.dataset.name;
-                                const customerEmail = this.dataset.email_proveedor;
-                                
-                                const editCustomerId = document.getElementById("editCustomerId");
-                                const editName = document.getElementById("editName");
-                                const editEmail_proveedor = document.getElementById("editEmail_proveedor");
-
-                                if (editCustomerId && editName && editEmail_proveedor) {
-                                    editCustomerId.value = customerId;
-                                    editName.value = customerName;
-                                    editEmail_proveedor.value = customerEmail;
-
-                                    showModal("editCustomerModal");
-                                }
-                            });
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
+                // Agregar eventos para los botones de eliminar
+                const deleteButtons = document.querySelectorAll(".delete-button");
+                deleteButtons.forEach(function(button) {
+                    button.addEventListener("click", function(event) {
+                        event.preventDefault();
+                        const customerId = button.getAttribute("data-id");
+                        if (confirm("Are you sure you want to delete this customer?")) {
+                            deleteCustomer(customerId);
+                        }
+                    });
                 });
             }
+        };
+        xhr.send();
+    }
+
+    // Abrir el modal de edición con datos del cliente
+    function openEditModal(id, name, email) {
+        const modal = document.getElementById("editCustomerModal");
+        if (modal) {
+            modal.style.display = "block";
+            document.getElementById("editCustomerId").value = id;
+            document.getElementById("editName").value = name;
+            document.getElementById("editEmail_proveedor").value = email;
         }
-
-        // Inicializar la carga de clientes al cargar la página
-        loadCustomers();
     }
 
-    function getParameterByName(name) {
-        const url = new URL(window.location.href);
-        return url.searchParams.get(name);
+    // Eliminar cliente
+    function deleteCustomer(customerId) {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "delete_customer.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    showMessage(response.message);
+                    loadCustomers(); // Recargar la lista de clientes
+                } else {
+                    showMessage(response.message);
+                }
+            }
+        };
+        xhr.send(`id=${encodeURIComponent(customerId)}`);
     }
 
-    function validateEmail(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
+    // Cargar clientes al cargar la página
+    loadCustomers();
+
+    // Manejar el logout
+    const logoutButton = document.getElementById("logoutButton");
+    if (logoutButton) {
+        logoutButton.addEventListener("click", function(event) {
+            event.preventDefault();
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "logout.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        showMessage(response.message, "index.php");
+                    } else {
+                        showMessage(response.message);
+                    }
+                }
+            };
+            xhr.send();
+        });
     }
 
-    function validatePassword(password) {
-        return password.length >= 6; // Ejemplo: longitud mínima de 6 caracteres
+    // Cerrar los modales si se hace clic fuera de ellos
+    window.addEventListener("click", function(event) {
+        const modals = document.querySelectorAll(".modal");
+        modals.forEach(function(modal) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+    });
+
+    // Manejar el formulario de agregar cliente
+    const addCustomerForm = document.getElementById("addCustomerForm");
+    if (addCustomerForm) {
+        addCustomerForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email_proveedor").value;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "add_customer.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        showMessage(response.message);
+                        closeModal("addCustomerModal");
+                        loadCustomers(); // Recargar la lista de clientes
+                    } else {
+                        showMessage(response.message);
+                    }
+                }
+            };
+            xhr.send(`name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`);
+        });
+    }
+
+    // Manejar el formulario de editar cliente
+    const editCustomerForm = document.getElementById("editCustomerForm");
+    if (editCustomerForm) {
+        editCustomerForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+            const id = document.getElementById("editCustomerId").value;
+            const name = document.getElementById("editName").value;
+            const email = document.getElementById("editEmail_proveedor").value;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "edit_customer.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        showMessage(response.message);
+                        closeModal("editCustomerModal");
+                        loadCustomers(); // Recargar la lista de clientes
+                    } else {
+                        showMessage(response.message);
+                    }
+                }
+            };
+            xhr.send(`id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`);
+        });
     }
 });
