@@ -49,13 +49,13 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
 <div id="editCustomerModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
-        <h2>Edit Customer</h2>
+        <h2>Editar Proveedor</h2>
         <form id="editCustomerForm" method="post" action="edit_customer.php">
             <input type="hidden" id="editCustomerId" name="id">
             <label for="editName">Name:</label>
             <input type="text" id="editName" name="name" required>
             <label for="editEmail_proveedor">Email:</label>
-            <input type="email" id="editEmail_proveedor" name="email" required>
+            <input type="email" id="editEmail_proveedor" name="editEmail_proveedor" required>
             <button type="submit">Actualizar proveedor</button>
         </form>
     </div>
