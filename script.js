@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <td>${customer.name}</td>
                                 <td>${customer.email_proveedor}</td>
                                 <td>
-                                    <a href="#" class="edit-button" data-id="${customer.id}" data-name="${customer.name}" data-email="${customer.email}">Edit</a>
+                                    <a href="#" class="edit-button" data-id="${customer.id}" data-name="${customer.name}" data-email="${customer.email_proveedor}">Edit</a>
                                     <a href="delete_customer.php?id=${customer.id}" class="delete-button">Delete</a>
                                 </td>
                             `;
@@ -232,7 +232,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 const customerId = this.dataset.id;
                                 const customerName = this.dataset.name;
                                 const customerEmail = this.dataset.email_proveedor;
-                                console.log(customerEmail);
+                                
                                 const editCustomerId = document.getElementById("editCustomerId");
                                 const editName = document.getElementById("editName");
                                 const editEmail_proveedor = document.getElementById("editEmail_proveedor");
