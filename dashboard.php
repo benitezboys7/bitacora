@@ -79,9 +79,13 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
                     <span class="material-symbols-outlined">dashboard</span>
                     <h3>Dashboard</h3> 
                 </a>
-                <a href="#" class="menu-link" data-target="customers">
+                <a href="#" class="menu-link" data-target="products">
                 <span class="material-symbols-outlined">badge</span>
                     <h3>Mantenimientos</h3> 
+                </a>
+                <a href="#" class="menu-link" data-target="customers">
+                <span class="material-symbols-outlined">engineering</span>
+                    <h3>Proveedores</h3> 
                 </a>
                 <a href="#" class="menu-link" data-target="analytics">
                     <span class="material-symbols-outlined">insights</span>
@@ -92,10 +96,7 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
                     <h3>Messages</h3> 
                     <span class="msg_count">14</span>
                 </a>
-                <a href="#" class="menu-link" data-target="products">
-                    <span class="material-symbols-outlined">receipt_long</span>
-                    <h3>Products</h3> 
-                </a>
+                
                 <a href="#" class="menu-link" data-target="reports">
                     <span class="material-symbols-outlined">report_gmailerrorred</span>
                     <h3>Reports</h3> 
@@ -106,7 +107,7 @@ $_SESSION['last_activity'] = time(); // Actualiza el tiempo de la última activi
                 </a>
                 <a href="#" class="menu-link" data-target="add-product">
                 <span class="material-symbols-outlined">person_add</span>
-                    <h3>Agregar Usuarios</h3> 
+                    <h3>Usuarios</h3> 
                 </a>
                 <a href="#" id="logoutButton" class="menu-link">
                     <span class="material-symbols-outlined">logout</span>
